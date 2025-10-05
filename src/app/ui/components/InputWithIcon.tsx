@@ -1,4 +1,5 @@
 import { ReactElement, useState } from "react";
+import Input from "./Input";
 
 interface IInputWithIconProps {
   type: string;
@@ -17,7 +18,7 @@ export default function InputWithIcon({
   const [showIcon, setShowIcon] = useState<boolean>(false);
   return (
     <div className="relative">
-      <input
+      <Input
         type={showIcon && secondType ? secondType : type}
         className="border border-[var(--color-gray)] rounded-md p-2 outline-none text-[var(--color-gray-plus)] text-sm w-full"
         placeholder={placeholder}

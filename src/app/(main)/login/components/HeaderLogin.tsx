@@ -1,7 +1,13 @@
-import Button from "@/app/ui/components/Button";
-import { IconGoogle } from "../../../../../public/icons";
+import Button from "@/ui/components/Button";
+import { IProvider, TProvider } from "@/interfaces/provider";
+import { CURRENT_PROVIDERS } from "../utils/constants/providers";
 
-export default function HeaderLogin(): React.ReactNode {
+interface IHeaderLoginProps {
+  handleOauthLogin: (provider: TProvider) => void;
+}
+export default function HeaderLogin({
+  handleOauthLogin,
+}: IHeaderLoginProps): React.ReactNode {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-2 items-center">
@@ -16,15 +22,16 @@ export default function HeaderLogin(): React.ReactNode {
         </div>
       </div>
       <div className="flex items-center gap-2 w-full justify-between">
-        <Button variant="gray" onClick={() => {}} type="button">
-          <IconGoogle />
-        </Button>
-        <Button variant="gray" onClick={() => {}} type="button">
-          <IconGoogle />
-        </Button>
-        <Button variant="gray" onClick={() => {}} type="button">
-          <IconGoogle />
-        </Button>
+        {CURRENT_PROVIDERS.map((provider: IProvider, index: number) => (
+          <Button
+            onClick={() => handleOauthLogin(provider.provider)}
+            type="button"
+            key={index}
+            variant="gray"
+          >
+            {provider.icon}
+          </Button>
+        ))}
       </div>
     </div>
   );

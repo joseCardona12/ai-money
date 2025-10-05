@@ -1,8 +1,9 @@
-export type TButtonVariant = "gray" | "black" | "ghost";
+export type TButtonVariant = "gray" | "black" | "ghost" | "disabled";
 export interface IButtonVariant {
   gray: string;
   black: string;
   ghost: string;
+  disabled: string;
 }
 
 export const buttonVariant: IButtonVariant = {
@@ -10,4 +11,5 @@ export const buttonVariant: IButtonVariant = {
   black:
     "bg-[var(--color-black)] text-white hover:bg-[var(--color-black-hover)]",
   ghost: "hover:text-[var(--color-orange)]",
+  disabled: "bg-[var(--color-gray-light)] border border-[var(--color-gray)]",
 };

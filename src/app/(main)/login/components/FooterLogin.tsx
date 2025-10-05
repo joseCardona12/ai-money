@@ -1,4 +1,4 @@
-import Button from "@/app/ui/components/Button";
+import Button from "@/ui/components/Button";
 import Link from "next/link";
 import { IconSpinner } from "../../../../../public/icons";
 

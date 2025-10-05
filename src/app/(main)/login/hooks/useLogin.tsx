@@ -6,12 +6,16 @@ import {
   formSchemaLogin,
 } from "../utils/constants/formSchemaLogin";
 import { useState } from "react";
-import { ILoginRequest } from "@/app/interfaces/login";
+import { ILoginRequest } from "@/interfaces/login";
+import { TProvider } from "@/interfaces/provider";
+import { SignIn, useSignIn } from "@clerk/nextjs";
+import { oauthService } from "@/services/auth";
 
 export default function useLogin() {
   const [showIcon, setShowIcon] = useState<boolean>(false);
   const [checkRemember, setCheckRemember] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const { signIn, isLoaded } = useSignIn();
   const {
     control,
     handleSubmit,
@@ -24,13 +28,29 @@ export default function useLogin() {
     reValidateMode: "onChange",
   });
 
-  const handleLogin = (data: ILoginRequest) => {
+  const handleLogin = async (data: ILoginRequest): Promise<void> => {
     setLoading(true);
     const bodyLogin = {
       ...data,
       isRemember: checkRemember,
     };
-    console.log("body", bodyLogin);
+    try {
+      const response = await oauthService.login(bodyLogin);
+    } catch (error: any) {
+      console.log("error", error);
+    }
+  };
+
+  const handleOauthLogin = async (provider: TProvider): Promise<void> => {
+    try {
+      await signIn?.authenticateWithRedirect({
+        strategy: provider,
+        redirectUrl: "/",
+        redirectUrlComplete: "/",
+      });
+    } catch (error: any) {
+      console.log("login error", error);
+    }
   };
 
   return {
@@ -39,6 +59,7 @@ export default function useLogin() {
     showIcon,
     loading,
     checkRemember,
+    handleOauthLogin,
     setError,
     handleSubmit,
     handleLogin,

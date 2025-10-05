@@ -1,3 +1,5 @@
-export default function SignUp() {
-  return <div>hello</div>;
+import SignUpView from "./SignUpView";
+
+export default function SignUpPage() {
+  return <SignUpView />;
 }

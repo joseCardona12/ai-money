@@ -1,13 +1,13 @@
 import Button from "@/ui/components/Button";
 import { IProvider, TProvider } from "@/interfaces/provider";
-import { CURRENT_PROVIDERS } from "../../../../utils/constants/providers";
+import { CURRENT_PROVIDERS } from "@/utils/constants/providers";
 
-interface IHeaderLoginProps {
-  handleOauthLogin: (provider: TProvider) => void;
+interface IHeaderSignUpProps {
+  handleOauthSignUp: (provider: TProvider) => void;
 }
-export default function HeaderLogin({
-  handleOauthLogin,
-}: IHeaderLoginProps): React.ReactNode {
+export default function HeaderSignUp({
+  handleOauthSignUp,
+}: IHeaderSignUpProps): React.ReactNode {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-2 items-center">
@@ -17,14 +17,14 @@ export default function HeaderLogin({
             Welcome back
           </h1>
           <p className="text-[var(--color-gray-plus)]">
-            Please enter your details to sign in.
+            Please enter your details to sign up.
           </p>
         </div>
       </div>
       <div className="flex items-center gap-2 w-full justify-between">
         {CURRENT_PROVIDERS.map((provider: IProvider, index: number) => (
           <Button
-            onClick={() => handleOauthLogin(provider.provider)}
+            onClick={() => handleOauthSignUp(provider.provider)}
             type="button"
             key={index}
             variant="gray"

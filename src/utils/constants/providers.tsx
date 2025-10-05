@@ -1,9 +1,5 @@
 import { IProvider } from "@/interfaces/provider";
-import {
-  IconGithub,
-  IconGoogle,
-  IconMicrosoft,
-} from "../../../../../../public/icons";
+import { IconGithub, IconGoogle, IconMicrosoft } from "../../../public/icons";
 
 export const CURRENT_PROVIDERS: IProvider[] = [
   {

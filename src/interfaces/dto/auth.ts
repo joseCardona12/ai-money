@@ -9,3 +9,9 @@ export interface ILoginResponseDto {
   message: string;
   data: [];
 }
+
+export interface ISignUpRequestDto {
+  email: string;
+  password: string;
+  cellphone: string;
+}

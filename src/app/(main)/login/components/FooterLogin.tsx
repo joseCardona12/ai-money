@@ -1,4 +1,4 @@
-import Button from "@/app/ui/components/Button";
+import Button from "@/ui/components/Button";
 import Link from "next/link";
 import { IconSpinner } from "../../../../../public/icons";
 
@@ -20,7 +20,7 @@ export default function FooterLogin({
       </Button>
       <p className="text-sm text-[var(--color-gray-plus)] text-center">
         Don't have an account yet?{" "}
-        <Link href="" className="text-[var(--color-orange)]">
+        <Link href="/" className="text-[var(--color-orange)] underline">
           Sign Up
         </Link>
       </p>

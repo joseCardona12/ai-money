@@ -1,14 +1,16 @@
-import InputWithIcon from "@/app/ui/components/InputWithIcon";
+import InputWithIcon from "@/ui/components/InputWithIcon";
 import { IconEye, IconEyeOff } from "../../../../../public/icons";
-import RememberMe from "@/app/ui/components/RememberMe";
-import FormField from "@/app/ui/components/FormField";
-import { ILoginRequest } from "@/app/interfaces/login";
+import RememberMe from "@/ui/components/RememberMe";
+import FormField from "@/ui/components/FormField";
+import { ILoginRequest } from "@/interfaces/login";
 import { Control, FieldErrors } from "react-hook-form";
+import Link from "next/link";
 
 interface IBodyLoginProps {
   control: Control<ILoginRequest>;
   errors: FieldErrors<ILoginRequest>;
   showIcon: boolean;
+  checkRemember: boolean;
   setShowIcon: (value: boolean) => void;
   setCheckRemember: (value: boolean) => void;
 }
@@ -16,6 +18,7 @@ export default function BodyLogin({
   control,
   errors,
   showIcon,
+  checkRemember,
   setShowIcon,
   setCheckRemember,
 }: IBodyLoginProps): React.ReactNode {
@@ -44,8 +47,16 @@ export default function BodyLogin({
         showIcon={showIcon}
       />
       <div className="flex items-center justify-between">
-        <RememberMe setCheckRemember={setCheckRemember} />
-        <p className="text-sm text-[var(--color-gray-plus)]">Forgot password</p>
+        <RememberMe
+          setCheckRemember={setCheckRemember}
+          checkRemember={checkRemember}
+        />
+        <Link
+          href="/"
+          className="text-sm text-[var(--color-gray-plus)] hover:text-[var(--color-orange)] underline"
+        >
+          Forgot password
+        </Link>
       </div>
     </div>
   );

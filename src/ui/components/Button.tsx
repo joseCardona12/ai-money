@@ -1,7 +1,4 @@
-import {
-  buttonVariant,
-  TButtonVariant,
-} from "@/app/src/utils/constants/buttonVariant";
+import { buttonVariant, TButtonVariant } from "@/utils/constants/buttonVariant";
 
 interface IButtonProps {
   children: React.ReactNode;

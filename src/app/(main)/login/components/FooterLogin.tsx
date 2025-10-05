@@ -20,7 +20,7 @@ export default function FooterLogin({
       </Button>
       <p className="text-sm text-[var(--color-gray-plus)] text-center">
         Don't have an account yet?{" "}
-        <Link href="" className="text-[var(--color-orange)]">
+        <Link href="/sign-up" className="text-[var(--color-orange)]">
           Sign Up
         </Link>
       </p>

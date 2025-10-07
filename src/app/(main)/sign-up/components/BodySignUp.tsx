@@ -10,12 +10,14 @@ interface IBodySignUpProps {
   errors: FieldErrors<ISignUpRequestDto>;
   showIcon: boolean;
   setShowIcon: (value: boolean) => void;
+  setSelectedCode: (value: string) => void;
 }
 export default function BodySignUp({
   control,
   errors,
   showIcon,
   setShowIcon,
+  setSelectedCode,
 }: IBodySignUpProps): React.ReactNode {
   return (
     <div className="flex flex-col gap-4">
@@ -27,7 +29,7 @@ export default function BodySignUp({
         placeholder="Enter your email..."
         error={errors.email}
       />
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-2">
         <Select
           values={CURRENT_COUNTRY_NUMBERS.map((country) => ({
             label: country.name,
@@ -35,15 +37,18 @@ export default function BodySignUp({
           }))}
           id=""
           name="numbers"
+          selectedCode={setSelectedCode}
         />
-        <FormField<ISignUpRequestDto>
-          control={control}
-          label=""
-          name="cellphone"
-          type="number"
-          placeholder="Enter your cellphone..."
-          error={errors.cellphone}
-        />
+        <div className="w-full">
+          <FormField<ISignUpRequestDto>
+            control={control}
+            label=""
+            name="cellphone"
+            type="number"
+            placeholder="Enter your cellphone..."
+            error={errors.cellphone}
+          />
+        </div>
       </div>
       <FormField<ISignUpRequestDto>
         control={control}

@@ -1,12 +1,17 @@
 import Button from "@/ui/components/Button";
 import { IconSpinner } from "../../../../../public/icons";
 import Link from "next/link";
+import Modal from "@/ui/components/Modal";
 
 interface IFooterSignUpProps {
   loading: boolean;
+  setOpenModal: (value: boolean) => void;
+  openModal: boolean;
 }
 export default function FooterSignUp({
   loading,
+  setOpenModal,
+  openModal,
 }: IFooterSignUpProps): React.ReactNode {
   return (
     <div className="w-full flex flex-col gap-2">
@@ -24,6 +29,14 @@ export default function FooterSignUp({
           Login
         </Link>
       </p>
+      <Modal setOpenModal={setOpenModal} openModal={openModal} high="medium">
+        <div className="flex flex-col justify-center items-center gap-4">
+          <IconSpinner className="text-[var(--color-orange)] text-4xl animate-spin" />
+          <p className="text-[var(--color-gray-plus)] font-medium">
+            Loading...
+          </p>
+        </div>
+      </Modal>
     </div>
   );
 }

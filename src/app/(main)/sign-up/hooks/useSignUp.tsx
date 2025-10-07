@@ -11,6 +11,8 @@ import { useState } from "react";
 export default function useSignUp() {
   const [showIcon, setShowIcon] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [selectedCode, setSelectedCode] = useState<string>("");
+  const [openModal, setOpenModal] = useState<boolean>(false);
 
   const {
     control,
@@ -25,7 +27,12 @@ export default function useSignUp() {
   });
 
   const handleSignUp = async (data: ISignUpRequestDto): Promise<void> => {
-    console.log("data", data);
+    setOpenModal(true);
+    const bodySignUp = {
+      ...data,
+      cellphone: `${selectedCode}${data.cellphone}`,
+    };
+    console.log("body", bodySignUp);
   };
   return {
     control,
@@ -37,5 +44,9 @@ export default function useSignUp() {
     handleSignUp,
     setShowIcon,
     setLoading,
+    selectedCode,
+    setSelectedCode,
+    openModal,
+    setOpenModal,
   };
 }

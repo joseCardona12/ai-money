@@ -13,6 +13,9 @@ export default function SignUp(): React.ReactNode {
     setShowIcon,
     showIcon,
     loading,
+    setSelectedCode,
+    setOpenModal,
+    openModal,
   } = useSignUp();
   return (
     <form
@@ -26,8 +29,13 @@ export default function SignUp(): React.ReactNode {
         errors={errors}
         setShowIcon={setShowIcon}
         showIcon={showIcon}
+        setSelectedCode={setSelectedCode}
       />
-      <FooterSignUp loading={loading} />
+      <FooterSignUp
+        loading={loading}
+        setOpenModal={setOpenModal}
+        openModal={openModal}
+      />
     </form>
   );
 }

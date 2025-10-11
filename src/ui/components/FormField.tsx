@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Control,
   Controller,
@@ -22,6 +24,7 @@ interface IFormFieldProps<T extends FieldValues> {
   setShowIcon?: (value: boolean) => void;
   icon?: ReactElement;
   secondIcon?: ReactElement;
+  isOptional?: boolean;
 }
 
 export default function FormField<T extends FieldValues>({
@@ -38,10 +41,30 @@ export default function FormField<T extends FieldValues>({
   setShowIcon,
   icon,
   secondIcon,
+  isOptional = false,
 }: IFormFieldProps<T>): React.ReactNode {
   return (
-    <div>
-      <label htmlFor={id || label.toLocaleLowerCase()}>{label}</label>
+    <div className="flex flex-col gap-1">
+      {!isOptional ? (
+        <label
+          className={`font-medium text-sm`}
+          htmlFor={id || label.toLocaleLowerCase()}
+        >
+          {label}
+        </label>
+      ) : (
+        <div className="flex items-center justify-between">
+          <label
+            className={`font-medium text-sm`}
+            htmlFor={id || label.toLocaleLowerCase()}
+          >
+            {label}
+          </label>
+          <span className="text-sm text-[var(--color-text-gray)]">
+            Optional
+          </span>
+        </div>
+      )}
       <Controller
         name={name}
         control={control}
@@ -50,7 +73,6 @@ export default function FormField<T extends FieldValues>({
             <div className="relative">
               <Input
                 type={showIcon && secondType ? secondType : type}
-                className="border border-[var(--color-gray)] rounded-md p-2 outline-none text-[var(--color-gray-plus)] text-sm w-full"
                 placeholder={
                   placeholder || `Enter your ${label.toLocaleLowerCase()}`
                 }
@@ -59,7 +81,7 @@ export default function FormField<T extends FieldValues>({
                 error={error?.message}
               />
               <span
-                className="absolute top-3 right-3 text-[var(--color-gray-plus)] bg-white cursor-pointer"
+                className="absolute top-3 right-3 bg-white cursor-pointer text-[var(--color-text-gray)]"
                 onClick={() => {
                   setShowIcon?.(!showIcon);
                 }}

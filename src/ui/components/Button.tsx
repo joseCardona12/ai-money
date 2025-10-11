@@ -1,25 +1,24 @@
-import { buttonVariant, TButtonVariant } from "@/utils/constants/buttonVariant";
+import {
+  CURRENT_BUTTON_VARIANT,
+  TButtonVariant,
+} from "@/utils/constants/buttonVariant";
+import { ButtonHTMLAttributes } from "react";
 
-interface IButtonProps {
+interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
   variant: TButtonVariant;
-  onClick: () => void;
-  type: "submit" | "reset" | "button" | undefined;
-  disabled?: boolean;
+  className?: string;
 }
 export default function Button({
   children,
   variant,
-  onClick,
-  type,
-  disabled,
+  className,
+  ...props
 }: IButtonProps): React.ReactNode {
   return (
     <button
-      className={`p-2 rounded-md pl-10 pr-10 cursor-pointer transition-colors duration-200 ${buttonVariant[variant]} w-full text-sm flex justify-center`}
-      onClick={onClick}
-      type={type}
-      disabled={disabled}
+      className={`${CURRENT_BUTTON_VARIANT[variant]} transition-colors duration-200 text-sm pl-6 pr-6 pt-3 pb-3 rounded-md ${className} shadow-sm/2`}
+      {...props}
     >
       {children}
     </button>

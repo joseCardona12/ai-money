@@ -1,15 +1,16 @@
-export type TButtonVariant = "gray" | "black" | "ghost" | "disabled";
+export type TButtonVariant = "outline" | "primary" | "ghost" | "secondary";
 export interface IButtonVariant {
-  gray: string;
-  black: string;
+  outline: string;
+  primary: string;
   ghost: string;
-  disabled: string;
+  secondary: string;
 }
 
-export const buttonVariant: IButtonVariant = {
-  gray: "border border-[var(--color-gray)] hover:bg-[var(--color-gray-light)] text-[var(--color-gray-plus)]",
-  black:
-    "bg-[var(--color-black)] text-white hover:bg-[var(--color-black-hover)]",
-  ghost: "hover:text-[var(--color-orange)]",
-  disabled: "bg-[var(--color-gray-light)] border border-[var(--color-gray)]",
+export const CURRENT_BUTTON_VARIANT: IButtonVariant = {
+  outline:
+    "border border-[var(--color-gray-border)] text-[var(--color-text-gray)] hover:bg-[var(--color-gray-hover)] cursor-pointer",
+  primary:
+    "bg-[var(--color-blue)] text-white cursor-pointer hover:bg-[var(--color-blue-hover)]",
+  ghost: "cursor-pointer hover:bg-[var(--color-gray-hover)]",
+  secondary: "",
 };

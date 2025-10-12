@@ -25,6 +25,7 @@ interface IFormFieldProps<T extends FieldValues> {
   icon?: ReactElement;
   secondIcon?: ReactElement;
   isOptional?: boolean;
+  className?: string;
 }
 
 export default function FormField<T extends FieldValues>({
@@ -42,9 +43,10 @@ export default function FormField<T extends FieldValues>({
   icon,
   secondIcon,
   isOptional = false,
+  className,
 }: IFormFieldProps<T>): React.ReactNode {
   return (
-    <div className="flex flex-col gap-1">
+    <div className={`flex flex-col gap-1`}>
       {!isOptional ? (
         <label
           className={`font-medium text-sm`}
@@ -70,12 +72,10 @@ export default function FormField<T extends FieldValues>({
         control={control}
         render={({ field }) =>
           withIcon ? (
-            <div className="relative">
+            <div className={`relative`}>
               <Input
                 type={showIcon && secondType ? secondType : type}
-                placeholder={
-                  placeholder || `Enter your ${label.toLocaleLowerCase()}`
-                }
+                placeholder={placeholder}
                 {...field}
                 id={id ?? label.toLocaleLowerCase()}
                 error={error?.message}
@@ -94,10 +94,9 @@ export default function FormField<T extends FieldValues>({
               {...field}
               id={id ?? label.toLocaleLowerCase()}
               type={type}
-              placeholder={
-                placeholder || `Enter your ${label.toLocaleLowerCase()}`
-              }
+              placeholder={placeholder}
               error={error?.message}
+              className={className}
             />
           )
         }

@@ -3,12 +3,14 @@ interface IInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   placeholder?: string;
   name?: string;
   error?: string;
+  className?: string;
 }
 export default function Input({
   type,
   placeholder,
   error,
   name,
+  className,
   ...props
 }: IInputProps): React.ReactNode {
   return (
@@ -17,7 +19,7 @@ export default function Input({
         type={type}
         className={`border border-[var(--color-gray-border)] p-2 outline-none rounded-md text-sm text-[var(--color-text-gray)] shadow-sm/2 focus:shadow-sm ${
           error && "border-[var(--color-red)] text-[var(--color-red)]"
-        }`}
+        } ${className}`}
         placeholder={placeholder}
         name={name}
         {...props}

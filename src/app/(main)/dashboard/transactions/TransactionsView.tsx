@@ -1,6 +1,9 @@
 "use client";
 import TransactionsContent from "./components/TransactionsContent";
+import useTransactions from "./hooks/useTransactions";
 
 export default function TransactionsView(): React.ReactNode {
-  return <TransactionsContent />;
+  const transactionsData = useTransactions();
+
+  return <TransactionsContent transactionsData={transactionsData} />;
 }

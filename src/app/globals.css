@@ -25,6 +25,14 @@ html {
   --color-text-black: #0a0b0f;
   --color-gray-hover: rgb(244, 244, 244);
   --color-red: rgb(249, 113, 113);
+  --color-red-light: #fef2f2;
+  --color-green: #10b981;
+  --color-green-light: #f0fdf4;
+  --color-orange: #f59e0b;
+  --color-orange-light: #fffbeb;
+  --color-purple: #8b5cf6;
+  --color-purple-light: #faf5ff;
+  --color-white: #ffffff;
   --color-gray-2: #f0f2f5;
   --font-family: var(--font-inter), sans-serif;
 }
@@ -62,5 +70,5 @@ h6 {
 p {
   font-family: var(--font-inter);
   color: var(--color-text-gray);
-  margin-bottom: 1rem;
+  margin-bottom: 0;
 }

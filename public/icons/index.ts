@@ -12,6 +12,7 @@ import { LuUser as IconUser } from "react-icons/lu";
 import { RiSettings4Line as IconSettings } from "react-icons/ri";
 import { BiLogOutCircle as IconLogout } from "react-icons/bi";
 import { BsMicrosoft as IconMicrosoft } from "react-icons/bs";
+import { BsThreeDotsVertical as IconDotsVertical } from "react-icons/bs";
 
 export {
   IconEye,
@@ -28,4 +29,5 @@ export {
   IconUser,
   IconSettings,
   IconLogout,
+  IconDotsVertical,
 };

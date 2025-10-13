@@ -22,7 +22,10 @@ export default function Card({
   selects,
 }: ICardProps): React.ReactNode {
   return (
-    <div className="p-6 rounded-xl border-1 border-[var(--color-gray-border)]">
+    <div
+      className="p-6 rounded-xl border-1 border-[var(--color-gray-border)]"
+      style={{ backgroundColor: "var(--color-white)" }}
+    >
       <div className="flex items-center justify-between mb-3">
         <h3
           className="text-sm font-medium"
@@ -38,7 +41,12 @@ export default function Card({
         />
       </div>
       <div className="mb-3">
-        <h2 className="text-3xl font-bold">{amount}</h2>
+        <h2
+          className="text-3xl font-bold"
+          style={{ color: "var(--color-text-black)" }}
+        >
+          {amount}
+        </h2>
       </div>
       <div className="flex items-center gap-2">
         <div className="flex items-center gap-1">

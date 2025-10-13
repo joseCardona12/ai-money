@@ -8,7 +8,9 @@ import { IoArrowForward as IconArrowRight } from "react-icons/io5";
 import { IoArrowBack as IconArrowLeft } from "react-icons/io5";
 import { MdOutlineEmail as IconEmail } from "react-icons/md";
 import { FiPhone as IconPhone } from "react-icons/fi";
-
+import { LuUser as IconUser } from "react-icons/lu";
+import { RiSettings4Line as IconSettings } from "react-icons/ri";
+import { BiLogOutCircle as IconLogout } from "react-icons/bi";
 import { BsMicrosoft as IconMicrosoft } from "react-icons/bs";
 
 export {
@@ -23,4 +25,7 @@ export {
   IconEmail,
   IconPhone,
   IconArrowLeft,
+  IconUser,
+  IconSettings,
+  IconLogout,
 };

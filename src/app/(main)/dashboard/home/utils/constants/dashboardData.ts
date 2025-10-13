@@ -1,4 +1,10 @@
-import { IconPlus, IconArrowUpRight, IconTarget, IconAlertTriangle, IconBulb } from "@tabler/icons-react";
+import {
+  IconPlus,
+  IconArrowUpRight,
+  IconTarget,
+  IconAlertTriangle,
+  IconBulb,
+} from "@tabler/icons-react";
 
 export const STATS_CARDS = [
   {
@@ -7,7 +13,7 @@ export const STATS_CARDS = [
     currency: "USD",
     change: "+20%",
     changeText: "you have extra $1,700 compared to last month",
-    positive: true
+    positive: true,
   },
   {
     title: "Income",
@@ -15,7 +21,7 @@ export const STATS_CARDS = [
     currency: "USD",
     change: "+20%",
     changeText: "you have extra $1,700 compared to last month",
-    positive: true
+    positive: true,
   },
   {
     title: "Expenses",
@@ -23,8 +29,8 @@ export const STATS_CARDS = [
     currency: "USD",
     change: "+20%",
     changeText: "you have extra $1,700 compared to last month",
-    positive: true
-  }
+    positive: true,
+  },
 ];
 
 export const CHART_DATA = [
@@ -49,7 +55,7 @@ export const TRANSACTIONS_DATA = [
     date: "03 august",
     amount: "$56.50",
     icon: "🏋️",
-    color: "var(--color-orange)"
+    color: "var(--color-orange)",
   },
   {
     id: 2,
@@ -57,7 +63,7 @@ export const TRANSACTIONS_DATA = [
     date: "03 august",
     amount: "$56.50",
     icon: "🚗",
-    color: "var(--color-purple)"
+    color: "var(--color-purple)",
   },
   {
     id: 3,
@@ -65,7 +71,7 @@ export const TRANSACTIONS_DATA = [
     date: "03 august",
     amount: "$56.50",
     icon: "📺",
-    color: "var(--color-blue)"
+    color: "var(--color-blue)",
   },
   {
     id: 4,
@@ -73,7 +79,7 @@ export const TRANSACTIONS_DATA = [
     date: "03 august",
     amount: "$56.50",
     icon: "🏋️",
-    color: "var(--color-orange)"
+    color: "var(--color-orange)",
   },
   {
     id: 5,
@@ -81,7 +87,7 @@ export const TRANSACTIONS_DATA = [
     date: "03 august",
     amount: "$56.50",
     icon: "🚗",
-    color: "var(--color-purple)"
+    color: "var(--color-purple)",
   },
   {
     id: 6,
@@ -89,7 +95,7 @@ export const TRANSACTIONS_DATA = [
     date: "03 august",
     amount: "$56.50",
     icon: "📺",
-    color: "var(--color-blue)"
+    color: "var(--color-blue)",
   },
   {
     id: 7,
@@ -97,7 +103,7 @@ export const TRANSACTIONS_DATA = [
     date: "03 august",
     amount: "$56.50",
     icon: "🏋️",
-    color: "var(--color-orange)"
+    color: "var(--color-orange)",
   },
   {
     id: 8,
@@ -105,7 +111,7 @@ export const TRANSACTIONS_DATA = [
     date: "03 august",
     amount: "$56.50",
     icon: "🏋️",
-    color: "var(--color-orange)"
+    color: "var(--color-orange)",
   },
   {
     id: 9,
@@ -113,8 +119,8 @@ export const TRANSACTIONS_DATA = [
     date: "03 august",
     amount: "$56.50",
     icon: "🏋️",
-    color: "var(--color-orange)"
-  }
+    color: "var(--color-orange)",
+  },
 ];
 
 export const ALERTS_DATA = [
@@ -123,15 +129,15 @@ export const ALERTS_DATA = [
     type: "warning",
     icon: IconAlertTriangle,
     message: "You spent 26% more on restaurants this month.",
-    color: "var(--color-orange)"
+    color: "var(--color-orange)",
   },
   {
     id: 2,
     type: "tip",
     icon: IconBulb,
     message: "You could save $350 if you reduce leisure spending.",
-    color: "var(--color-green)"
-  }
+    color: "var(--color-green)",
+  },
 ];
 
 export const QUICK_ACTIONS_DATA = [
@@ -140,39 +146,32 @@ export const QUICK_ACTIONS_DATA = [
     title: "Add Income",
     icon: IconPlus,
     color: "var(--color-green)",
-    bgColor: "var(--color-green-light)"
+    bgColor: "var(--color-green-light)",
   },
   {
     id: 2,
     title: "Add Expense",
     icon: IconArrowUpRight,
     color: "var(--color-red)",
-    bgColor: "var(--color-red-light)"
+    bgColor: "var(--color-red-light)",
   },
   {
     id: 3,
     title: "Transfer",
     icon: IconArrowUpRight,
     color: "var(--color-blue)",
-    bgColor: "var(--color-blue-light)"
+    bgColor: "var(--color-blue-light)",
   },
   {
     id: 4,
     title: "New Goal",
     icon: IconTarget,
     color: "var(--color-purple)",
-    bgColor: "var(--color-purple-light)"
-  }
+    bgColor: "var(--color-purple-light)",
+  },
 ];
 
 export const CHART_CONFIG = {
   maxValue: 800,
   height: 192, // h-48 in pixels
-};
-
-export const USER_DATA = {
-  name: "Jose Cardona",
-  email: "jose@gmail.com",
-  initials: "JC",
-  notificationCount: 1
 };

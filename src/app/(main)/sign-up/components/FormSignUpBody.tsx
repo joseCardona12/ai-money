@@ -62,11 +62,11 @@ export default function FormSignUpBody({
           />
           <span className="text-sm text-[var(--color-text-gray)]">
             I agree to the{" "}
-            <Link href="/" className="text-[var(--color-blue)]">
+            <Link href="/terms" className="text-[var(--color-blue)]">
               Terms of service
             </Link>{" "}
             and{" "}
-            <Link href="/" className="text-[var(--color-blue)]">
+            <Link href="/privacy" className="text-[var(--color-blue)]">
               Privacity Policy
             </Link>
           </span>

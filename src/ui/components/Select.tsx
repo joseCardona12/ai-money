@@ -72,13 +72,14 @@ export default function Select({
         className={`
           ${styles.trigger}
           w-full flex items-center justify-between
-          bg-white border border-gray-200 rounded-lg
+          border border-[var(--color-gray-border)] rounded-lg
           hover:border-gray-300 focus:outline-none focus:ring-0
           transition-colors duration-200 cursor-pointer
           ${isOpen ? "border-blue-500 ring-2 ring-blue-500" : ""}
         `}
+        style={{ backgroundColor: "var(--color-white)" }}
       >
-        <span className="text-gray-900">
+        <span style={{ color: "var(--color-text-black)" }}>
           {selectedOption ? selectedOption.label : placeholder}
         </span>
         <IconChevronDown
@@ -93,9 +94,10 @@ export default function Select({
           className={`
             ${styles.dropdown}
             absolute z-50 w-full
-            bg-white border border-gray-200 rounded-lg shadow-lg
+            border border-[var(--color-gray-border)] rounded-lg shadow-lg
             max-h-60 overflow-auto
           `}
+          style={{ backgroundColor: "var(--color-white)" }}
         >
           {options.map((option) => (
             <button
@@ -109,11 +111,17 @@ export default function Select({
                 ${
                   selectedValue === option.value
                     ? "bg-[var(--color-blue)] text-white focus:bg-[var(--color-blue-hover)]"
-                    : "text-gray-900"
+                    : ""
                 }
                 ${option === options[0] ? "rounded-t-lg" : ""}
                 ${option === options[options.length - 1] ? "rounded-b-lg" : ""}
               `}
+              style={{
+                color:
+                  selectedValue === option.value
+                    ? "white"
+                    : "var(--color-text-black)",
+              }}
             >
               {option.label}
             </button>

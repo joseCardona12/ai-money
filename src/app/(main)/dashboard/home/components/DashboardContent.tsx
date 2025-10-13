@@ -1,6 +1,6 @@
 "use client";
 import StatsCards from "./StatsCards";
-import ChartSection from "./ChartSection";
+import ChartSection from "./ChartDashboard/ChartSection";
 import TransactionsSection from "./TransactionsSection";
 import AlertsSection from "./AlertsSection";
 import QuickActionsSection from "./QuickActionsSection";
@@ -18,7 +18,7 @@ export default function DashboardContent({
     <div className="p-6 space-y-6">
       <TitleContent
         title="Dashboard"
-        description="Resumen de tu actividad financiera"
+        description="Summary of your financial activity"
       />
       <StatsCards statsCards={dashboardData.statsCards} />
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

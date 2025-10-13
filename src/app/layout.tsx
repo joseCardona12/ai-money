@@ -20,7 +20,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "ai money - Manage your finances wisely",
   description:
-    "Sistema de gestión financiera potenciado con inteligencia artificial para organizar tus finanzas personales y empresariales.",
+    "AI-powered financial management system to organize your personal and business finances.",
 };
 
 export default function RootLayout({

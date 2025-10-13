@@ -1,8 +1,9 @@
 "use client";
 import { IconBell, IconRefresh } from "@tabler/icons-react";
-import { USER_DATA } from "../utils/constants/dashboardData";
+import { USER_DATA } from "../utils/constants/layoutData";
 import IconButton from "@/ui/components/IconButton";
 import UserData from "@/ui/components/UserData";
+import { USER_MODAL_OPTIONS } from "../utils/constants/modalOption";
 
 interface DashboardHeaderProps {
   userData: typeof USER_DATA;
@@ -16,7 +17,10 @@ export default function DashboardHeader({
   isLoading,
 }: DashboardHeaderProps): React.ReactNode {
   return (
-    <header className="px-6 flex items-center justify-end p-4 border-b-1 border-[var(--color-gray-border)]">
+    <header
+      className="px-6 flex items-center justify-end p-4 border-b-1 border-[var(--color-gray-border)]"
+      style={{ backgroundColor: "var(--color-white)" }}
+    >
       <div className="flex items-center gap-4">
         <IconButton
           icon={IconRefresh}
@@ -36,7 +40,7 @@ export default function DashboardHeader({
               : undefined
           }
         />
-        <UserData userData={userData} />
+        <UserData userData={userData} options={USER_MODAL_OPTIONS} />
       </div>
     </header>
   );

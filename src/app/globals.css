@@ -58,7 +58,6 @@ h6 {
   font-family: var(--font-poppins);
   color: var(--color-black);
   font-weight: 600;
-  margin-bottom: 0.5rem;
 }
 p {
   font-family: var(--font-inter);

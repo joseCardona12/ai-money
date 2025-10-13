@@ -1,24 +1,97 @@
 import BarProgress from "@/ui/components/BarProgress";
 import useOnboardingProgress from "../hooks/useOnboardingProgress";
-import FormField from "@/ui/components/FormField";
-import { IOnboardingRequest } from "@/interfaces/onboarding";
-import FormFieldRadio from "@/ui/components/FormFieldRadio";
 import OnboardingProgressBody from "./OnboardingProgressBody";
+import { ONBOARDING_STEPS } from "../utils/constants/onboardingOptions";
+import Button from "@/ui/components/Button";
+import { IconArrowLeft, IconArrowRight } from "../../../../../public/icons";
 
 export default function OnboardingProgress(): React.ReactNode {
-  const { step, setStep, errors, control } = useOnboardingProgress();
+  const {
+    step,
+    setStep,
+    errors,
+    control,
+    handleSubmit,
+    handleOnboardingSubmit,
+    handleNext,
+    handleBack,
+    isLastStep,
+    isFirstStep,
+  } = useOnboardingProgress();
+
+  const currentStepData = ONBOARDING_STEPS.find((s) => s.step === step);
+
   return (
-    <div className="flex flex-col gap-4">
-      <BarProgress step={step} setStep={setStep} totalStep={4} />
-      <div>
-        <div>
-          <h1 className="text-[1.8rem] font-bold">Basic Information</h1>
+    <div className="h-full flex flex-col">
+      <div className="flex-shrink-0 mb-6">
+        <BarProgress step={step} setStep={setStep} totalStep={4} />
+      </div>
+
+      <form
+        onSubmit={handleSubmit(handleOnboardingSubmit)}
+        className="flex flex-col gap-6"
+      >
+        <div className="flex flex-col gap-2">
+          <h1 className="text-[1.8rem] font-bold">{currentStepData?.title}</h1>
           <p className="text-[var(--color-text-gray)] text-sm">
-            Let's start with some basic details about your finances.
+            {currentStepData?.description}
           </p>
         </div>
-        <OnboardingProgressBody errors={errors} control={control} />
-      </div>
+
+        <OnboardingProgressBody errors={errors} control={control} step={step} />
+
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between gap-2 w-full">
+            {!isFirstStep ? (
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleBack}
+                className="flex items-center gap-2"
+              >
+                <IconArrowLeft />
+                Back
+              </Button>
+            ) : (
+              <></>
+            )}
+
+            {isLastStep ? (
+              <Button
+                type="submit"
+                variant="primary"
+                className="flex items-center gap-2"
+              >
+                Get Started
+                <IconArrowRight />
+              </Button>
+            ) : (
+              <Button
+                type="button"
+                variant="primary"
+                onClick={handleNext}
+                className="flex items-center gap-2 w-full justify-center"
+              >
+                Continue
+                <IconArrowRight />
+              </Button>
+            )}
+          </div>
+
+          {!isLastStep && (
+            <div className="text-center">
+              <Button
+                type="button"
+                className="w-full"
+                onClick={() => setStep(4)}
+                variant="outline"
+              >
+                Skip for now
+              </Button>
+            </div>
+          )}
+        </div>
+      </form>
     </div>
   );
 }

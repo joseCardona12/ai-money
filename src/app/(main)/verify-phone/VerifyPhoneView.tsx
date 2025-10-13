@@ -1,3 +1,4 @@
+"use client";
 import Logo from "@/ui/components/Logo";
 import FormVerifyPhone from "./components/FormVerifyPhone";
 import FormVerifyPhoneRight from "./components/FormVerifyPhoneRight";

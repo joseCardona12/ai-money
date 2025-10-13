@@ -5,46 +5,80 @@ import {
   FieldValues,
   Path,
 } from "react-hook-form";
-import Input from "./Input";
 
 interface IFormFieldRadioProps<T extends FieldValues> {
   name: Path<T>;
   control: Control<T>;
   type: string;
-  placeholder: string;
-  id?: string;
-  label: string;
   error?: FieldError;
-  text: string;
+  text: string | React.ReactNode;
+  value: string;
 }
 export default function FormFieldRadio<T extends FieldValues>({
   name,
   control,
   type,
-  placeholder,
-  id,
-  label,
   error,
   text,
+  value,
 }: IFormFieldRadioProps<T>): React.ReactNode {
   return (
-    <div>
+    <div className="w-full">
       <Controller
         name={name}
         control={control}
         render={({ field }) => (
-          <div className="flex items-center gap-4 border border-[var(--color-gray-border)] rounded-lg pl-5 cursor-pointer">
+          <label
+            htmlFor={`${name}-${value}`}
+            className="w-full flex items-center gap-4 border rounded-lg p-4 cursor-pointer transition-colors"
+            style={{
+              borderColor:
+                field.value === value
+                  ? "var(--color-blue)"
+                  : "var(--color-gray-border)",
+              backgroundColor:
+                field.value === value
+                  ? "var(--color-blue-light)"
+                  : "transparent",
+            }}
+            onMouseEnter={(e) => {
+              if (field.value !== value) {
+                e.currentTarget.style.backgroundColor =
+                  "var(--color-gray-hover)";
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (field.value !== value) {
+                e.currentTarget.style.backgroundColor = "transparent";
+              }
+            }}
+          >
             <input
               type={type}
-              placeholder={placeholder}
-              {...field}
-              id={id ?? label.toLocaleLowerCase()}
-              className="bg-red-600"
+              value={value}
+              checked={field.value === value}
+              onChange={() => field.onChange(value)}
+              id={`${name}-${value}`}
+              className="w-4 h-4 flex-shrink-0"
+              style={{
+                accentColor: "var(--color-blue)",
+                borderColor: "var(--color-gray-border)",
+              }}
             />
-            <p className="text-base">{text}</p>
-          </div>
+            <div
+              className="text-sm flex-1 min-w-0"
+              style={{ color: "var(--color-text-black)" }}
+            >
+              {text}
+            </div>
+          </label>
         )}
       />
+      {error && (
+        <p className="text-sm mt-1" style={{ color: "var(--color-red)" }}>
+          {error.message}
+        </p>
+      )}
     </div>
   );
 }

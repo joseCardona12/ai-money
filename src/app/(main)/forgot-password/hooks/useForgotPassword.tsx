@@ -1,8 +1,6 @@
 import { useState } from "react";
-import {
-  CURRENT_CONTENT_TAB,
-  IContentTab,
-} from "../utils/constants/contentTab";
+import { CURRENT_CONTENT_TAB } from "../utils/constants/contentTab";
+import { IContentTab } from "@/interfaces/contentTab";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 import { useForm } from "react-hook-form";

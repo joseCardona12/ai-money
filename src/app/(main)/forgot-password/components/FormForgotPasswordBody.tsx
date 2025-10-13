@@ -1,6 +1,6 @@
 import ContentTab from "@/ui/components/ContentTab";
 import { IconCheck } from "../../../../../public/icons";
-import { IContentTab } from "../utils/constants/contentTab";
+import { IContentTab } from "@/interfaces/contentTab";
 import FormField from "@/ui/components/FormField";
 import { IForgotPasswordRequest } from "@/interfaces/forgotPassword";
 import { Control, FieldErrors } from "react-hook-form";

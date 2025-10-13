@@ -1,4 +1,4 @@
-import { IContentTab } from "@/app/(main)/forgot-password/utils/constants/contentTab";
+import { IContentTab } from "@/interfaces/contentTab";
 
 interface IContentTabProps {
   contentTabs: IContentTab[];

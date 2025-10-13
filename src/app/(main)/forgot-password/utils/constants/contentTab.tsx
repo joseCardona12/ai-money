@@ -1,12 +1,5 @@
-import { ReactElement } from "react";
 import { IconEmail, IconPhone } from "../../../../../../public/icons";
-
-export interface IContentTab {
-  icon: ReactElement;
-  text: string;
-  active: boolean;
-  tab_key: string;
-}
+import { IContentTab } from "@/interfaces/contentTab";
 
 export const CURRENT_CONTENT_TAB: IContentTab[] = [
   {

@@ -17,11 +17,11 @@ export default function BudgetAlertsSection({
         <IconAlertTriangle className="text-orange-600" size={20} />
         <h3 className="font-semibold text-orange-900">Budget Alerts</h3>
       </div>
-      
+
       <p className="text-sm text-orange-800 mb-3">
-        You've exceeded your budget in {alerts.length} categories:
+        You&apos;ve exceeded your budget in {alerts.length} categories:
       </p>
-      
+
       <div className="space-y-2">
         {alerts.map((alert) => (
           <div key={alert.id} className="text-sm text-red-600 font-medium">

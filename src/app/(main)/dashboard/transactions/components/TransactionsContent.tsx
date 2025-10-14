@@ -3,6 +3,7 @@ import TransactionsStatsCards from "./TransactionsStatsCards";
 import TransactionsFilters from "./TransactionsFilters";
 import TransactionsTable from "./TransactionsTable";
 import TransactionModal from "./TransactionModal";
+import TransactionDetailsModal from "./TransactionDetailsModal";
 import Button from "@/ui/components/Button";
 import { IconPlus, IconDownload } from "@tabler/icons-react";
 import { IUseTransactions } from "../hooks/useTransactions";
@@ -88,6 +89,16 @@ export default function TransactionsContent({
         onSubmit={transactionsData.handleModalSubmit}
         categories={transactionsData.categories}
         types={transactionsData.types}
+      />
+
+      {/* Transaction Details Modal */}
+      <TransactionDetailsModal
+        isOpen={transactionsData.detailsModal.isOpen}
+        onClose={transactionsData.closeDetailsModal}
+        transaction={transactionsData.detailsModal.selectedTransaction}
+        onEdit={transactionsData.handleEditTransaction}
+        onDelete={transactionsData.handleDeleteTransaction}
+        onDownloadReceipt={transactionsData.handleDownloadReceipt}
       />
     </div>
   );

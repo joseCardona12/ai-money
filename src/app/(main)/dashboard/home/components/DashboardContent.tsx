@@ -6,6 +6,7 @@ import AlertsSection from "./AlertsSection";
 import QuickActionsSection from "./QuickActionsSection";
 import { IUseDashboard } from "../hooks/useDashboard";
 import TitleContent from "@/ui/components/TitleContent";
+import TransactionDetailsModal from "../../transactions/components/TransactionDetailsModal";
 
 interface DashboardContentProps {
   dashboardData: IUseDashboard;
@@ -33,6 +34,10 @@ export default function DashboardContent({
           <TransactionsSection
             transactions={dashboardData.transactions}
             onTransactionClick={dashboardData.handleTransactionClick}
+            onEditTransaction={dashboardData.handleEditTransaction}
+            onDeleteTransaction={dashboardData.handleDeleteTransaction}
+            onViewDetails={dashboardData.handleViewDetails}
+            onDownloadReceipt={dashboardData.handleDownloadReceipt}
           />
         </div>
       </div>
@@ -43,6 +48,18 @@ export default function DashboardContent({
           onQuickAction={dashboardData.handleQuickAction}
         />
       </div>
+
+      {/* Transaction Details Modal */}
+      <TransactionDetailsModal
+        isOpen={dashboardData.detailsModal.isOpen}
+        onClose={dashboardData.closeDetailsModal}
+        transaction={dashboardData.detailsModal.selectedTransaction}
+        onEdit={(transaction) =>
+          dashboardData.handleEditTransaction(transaction.id)
+        }
+        onDelete={dashboardData.handleDeleteTransaction}
+        onDownloadReceipt={dashboardData.handleDownloadReceipt}
+      />
     </div>
   );
 }

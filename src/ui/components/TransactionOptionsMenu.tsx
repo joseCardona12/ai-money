@@ -36,7 +36,7 @@ export default function TransactionOptionsMenu({
   return (
     <div
       ref={menuRef}
-      className="absolute right-0 top-8 z-50 w-[200px] bg-[var(--color-gray)] border border-[var(--color-gray-border)] rounded-lg shadow-md"
+      className="absolute right-0 top-8 z-[60] w-[200px] bg-[var(--color-gray)] border border-[var(--color-gray-border)] rounded-lg shadow-lg"
     >
       <ul className="flex flex-col">
         {options.map((option) => (

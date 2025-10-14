@@ -1,15 +1,63 @@
-import { IconDots } from "@tabler/icons-react";
+import {
+  IconDots,
+  IconEye,
+  IconEdit,
+  IconDownload,
+  IconTrash,
+} from "@tabler/icons-react";
 import { TRANSACTIONS_DATA } from "../../utils/constants/dashboardData";
 import IconButton from "@/ui/components/IconButton";
+import TransactionOptionsMenu from "@/ui/components/TransactionOptionsMenu";
+import { ITransactionOption } from "@/interfaces/transactionOption";
+import { useState } from "react";
 
 interface RecentTransactionBodyProps {
   transactions: typeof TRANSACTIONS_DATA;
   onTransactionClick: (transactionId: number) => void;
+  onEditTransaction?: (transactionId: number) => void;
+  onDeleteTransaction?: (transactionId: number) => void;
+  onViewDetails?: (transactionId: number) => void;
+  onDownloadReceipt?: (transactionId: number) => void;
 }
 export default function RecentTransactionBody({
   transactions,
   onTransactionClick,
+  onEditTransaction,
+  onDeleteTransaction,
+  onViewDetails,
+  onDownloadReceipt,
 }: RecentTransactionBodyProps): React.ReactNode {
+  const [openMenuId, setOpenMenuId] = useState<number | null>(null);
+
+  const getTransactionOptions = (
+    transactionId: number
+  ): ITransactionOption[] => [
+    {
+      id: "view",
+      text: "View Details",
+      icon: <IconEye size={16} />,
+      onClick: () => onViewDetails?.(transactionId),
+    },
+    {
+      id: "edit",
+      text: "Edit Transaction",
+      icon: <IconEdit size={16} />,
+      onClick: () => onEditTransaction?.(transactionId),
+    },
+    {
+      id: "download",
+      text: "Download Receipt",
+      icon: <IconDownload size={16} />,
+      onClick: () => onDownloadReceipt?.(transactionId),
+    },
+    {
+      id: "delete",
+      text: "Delete",
+      icon: <IconTrash size={16} />,
+      onClick: () => onDeleteTransaction?.(transactionId),
+      variant: "danger" as const,
+    },
+  ];
   return (
     <div className="space-y-4 max-h-96 overflow-y-auto custom-scrollbar">
       {transactions.map((transaction) => (
@@ -47,12 +95,25 @@ export default function RecentTransactionBody({
             >
               {transaction.amount}
             </span>
-            <IconButton
-              icon={IconDots}
-              onClick={() => onTransactionClick(transaction.id)}
-              variant="ghost"
-              size="sm"
-            />
+            <div className="relative">
+              <IconButton
+                icon={IconDots}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpenMenuId(
+                    openMenuId === transaction.id ? null : transaction.id
+                  );
+                }}
+                variant="ghost"
+                size="sm"
+              />
+
+              <TransactionOptionsMenu
+                isOpen={openMenuId === transaction.id}
+                onClose={() => setOpenMenuId(null)}
+                options={getTransactionOptions(transaction.id)}
+              />
+            </div>
           </div>
         </div>
       ))}

@@ -6,11 +6,19 @@ import RecentTransactionBody from "./RecentTransaction/RecentTransactionBody";
 interface TransactionsSectionProps {
   transactions: typeof TRANSACTIONS_DATA;
   onTransactionClick: (transactionId: number) => void;
+  onEditTransaction?: (transactionId: number) => void;
+  onDeleteTransaction?: (transactionId: number) => void;
+  onViewDetails?: (transactionId: number) => void;
+  onDownloadReceipt?: (transactionId: number) => void;
 }
 
 export default function TransactionsSection({
   transactions,
   onTransactionClick,
+  onEditTransaction,
+  onDeleteTransaction,
+  onViewDetails,
+  onDownloadReceipt,
 }: TransactionsSectionProps): React.ReactNode {
   return (
     <div
@@ -29,6 +37,10 @@ export default function TransactionsSection({
       <RecentTransactionBody
         transactions={transactions}
         onTransactionClick={onTransactionClick}
+        onEditTransaction={onEditTransaction}
+        onDeleteTransaction={onDeleteTransaction}
+        onViewDetails={onViewDetails}
+        onDownloadReceipt={onDownloadReceipt}
       />
     </div>
   );

@@ -24,6 +24,11 @@ export interface IModalState {
   selectedTransaction?: ITransaction;
 }
 
+export interface IDetailsModalState {
+  isOpen: boolean;
+  selectedTransaction?: ITransaction;
+}
+
 export interface ITransactionData {
   stats: typeof TRANSACTIONS_STATS;
   transactions: typeof TRANSACTIONS_LIST;
@@ -62,6 +67,8 @@ export interface IUseTransactions
     ITransactionActions {
   filters: ITransactionFilters;
   modal: IModalState;
+  detailsModal: IDetailsModalState;
+  closeDetailsModal: () => void;
 }
 
 export default function useTransactions(): IUseTransactions {
@@ -75,6 +82,11 @@ export default function useTransactions(): IUseTransactions {
   const [modal, setModal] = useState<IModalState>({
     isOpen: false,
     mode: "add",
+    selectedTransaction: undefined,
+  });
+
+  const [detailsModal, setDetailsModal] = useState<IDetailsModalState>({
+    isOpen: false,
     selectedTransaction: undefined,
   });
 
@@ -151,8 +163,17 @@ export default function useTransactions(): IUseTransactions {
   };
 
   const handleViewDetails = (transaction: ITransaction) => {
-    console.log("View details:", transaction);
-    // Aquí iría la lógica para ver detalles
+    setDetailsModal({
+      isOpen: true,
+      selectedTransaction: transaction,
+    });
+  };
+
+  const closeDetailsModal = () => {
+    setDetailsModal({
+      isOpen: false,
+      selectedTransaction: undefined,
+    });
   };
 
   const handleDownloadReceipt = (transactionId: number) => {
@@ -177,6 +198,7 @@ export default function useTransactions(): IUseTransactions {
     // State
     filters,
     modal,
+    detailsModal,
 
     // Actions
     handleSearch,
@@ -195,5 +217,6 @@ export default function useTransactions(): IUseTransactions {
     handleDeleteTransaction,
     handleViewDetails,
     handleDownloadReceipt,
+    closeDetailsModal,
   };
 }

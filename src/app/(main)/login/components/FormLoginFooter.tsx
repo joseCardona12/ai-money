@@ -9,8 +9,13 @@ export default function FormLoginFooter({
 }: IFormLoginFooterProps): React.ReactNode {
   return (
     <div className="w-full flex flex-col gap-4">
-      <Button variant="primary" className="w-full">
-        Sign in
+      <Button
+        variant="primary"
+        className="w-full"
+        type="submit"
+        disabled={loading}
+      >
+        {loading ? "Signing in..." : "Sign in"}
       </Button>
       <p className="text-sm text-[var(--color-text-gray)] text-center">
         Don't have an account?{" "}

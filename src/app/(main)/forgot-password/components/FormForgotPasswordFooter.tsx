@@ -26,6 +26,7 @@ export default function FormForgotPasswordFooter({
         onClick={() => {
           router.push("/login");
         }}
+        type="button"
       >
         <IconArrowLeft />
         <span>Back to login</span>

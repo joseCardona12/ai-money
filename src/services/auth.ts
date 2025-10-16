@@ -6,9 +6,11 @@ class OAuthService {
   constructor() {
     this.httpClient = new HTTPClient();
   }
-  public login = async (request: ILoginRequestDto) => {
-    return await this.httpClient.post<ILoginRequestDto, ILoginResponseDto>(
-      "auth",
+  public login = async (
+    request: ILoginRequestDto
+  ): Promise<ILoginResponseDto> => {
+    return await this.httpClient.post<ILoginResponseDto, ILoginRequestDto>(
+      "auth/login",
       request
     );
   };

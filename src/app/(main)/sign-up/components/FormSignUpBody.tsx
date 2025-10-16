@@ -26,7 +26,6 @@ export default function FormSignUpBody({
         placeholder="name"
         error={errors.fullName}
         control={control}
-        isOptional
       />
       <FormField<ISignUpRequest>
         label="Email address"

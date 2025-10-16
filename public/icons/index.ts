@@ -13,6 +13,8 @@ import { RiSettings4Line as IconSettings } from "react-icons/ri";
 import { BiLogOutCircle as IconLogout } from "react-icons/bi";
 import { BsMicrosoft as IconMicrosoft } from "react-icons/bs";
 import { BsThreeDotsVertical as IconDotsVertical } from "react-icons/bs";
+import { IoClose as IconClose } from "react-icons/io5";
+import { BiError as IconError } from "react-icons/bi";
 
 export {
   IconEye,
@@ -30,4 +32,6 @@ export {
   IconSettings,
   IconLogout,
   IconDotsVertical,
+  IconClose,
+  IconError,
 };

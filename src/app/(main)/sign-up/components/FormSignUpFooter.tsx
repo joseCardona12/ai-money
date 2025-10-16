@@ -1,16 +1,32 @@
 import Button from "@/ui/components/Button";
-import { IconArrowRight } from "../../../../../public/icons";
+import { IconArrowRight, IconSpinner } from "../../../../../public/icons";
 import Link from "next/link";
 
-export default function FormSignUpFooter(): React.ReactNode {
+interface IFormSignUpFooterProps {
+  loading?: boolean;
+}
+
+export default function FormSignUpFooter({
+  loading = false,
+}: IFormSignUpFooterProps): React.ReactNode {
   return (
     <div className="w-full flex flex-col gap-2">
       <Button
         variant="primary"
         className="w-full flex items-center justify-center gap-2"
+        disabled={loading}
       >
-        Create account
-        <IconArrowRight />
+        {loading ? (
+          <>
+            Creating account...
+            <IconSpinner className="w-4 h-4 animate-spin" />
+          </>
+        ) : (
+          <>
+            Create account
+            <IconArrowRight />
+          </>
+        )}
       </Button>
       <p className="text-sm text-[var(--color-text-gray)] text-center">
         Do you have an account?{" "}

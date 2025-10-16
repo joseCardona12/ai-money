@@ -6,7 +6,7 @@ export const formSchemaLogin = z.object({
   password: z
     .string()
     .min(8, "Expected string to have >=8 characters")
-    .max(12, "Expected string to have <12 characters")
+    .max(20, "Expected string to have <20 characters")
     .regex(/[A-Z]/, "Must include a capital letter")
     .regex(/[a-z]/, "Must include a lowecase letter"),
 });

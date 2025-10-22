@@ -2,6 +2,7 @@
 import TransactionsTableHeader from "./TransactionsTableHeader";
 import TransactionsTableBody from "./TransactionsTableBody";
 import TransactionsTableFooter from "./TransactionsTableFooter";
+import TransactionsTableSkeleton from "./TransactionsTableSkeleton";
 import { ITransaction } from "../types/transaction";
 
 interface ITransactionsTableProps {
@@ -15,6 +16,7 @@ interface ITransactionsTableProps {
   onDeleteTransaction?: (transactionId: number) => void;
   onViewDetails?: (transaction: ITransaction) => void;
   onDownloadReceipt?: (transactionId: number) => void;
+  isLoading?: boolean;
 }
 
 export default function TransactionsTable({
@@ -28,8 +30,14 @@ export default function TransactionsTable({
   onDeleteTransaction,
   onViewDetails,
   onDownloadReceipt,
+  isLoading = false,
 }: ITransactionsTableProps): React.ReactNode {
   const calculatedTotalItems = totalItems || transactions.length;
+
+  // Show skeleton while loading
+  if (isLoading) {
+    return <TransactionsTableSkeleton />;
+  }
 
   return (
     <div className="rounded-xl border border-[var(--color-gray-border)] bg-white overflow-hidden">

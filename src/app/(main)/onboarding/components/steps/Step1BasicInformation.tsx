@@ -14,15 +14,15 @@ interface IStep1BasicInformationProps {
 export default function Step1BasicInformation({
   control,
   errors,
-  currencies,
+  currencies = [],
 }: IStep1BasicInformationProps): React.ReactNode {
   return (
     <div className="w-full max-w-full">
       <div className="mb-6">
         <h5 className="font-medium text-base mb-4">Preferred Currency</h5>
         <div className="flex flex-col gap-3">
-          {currencies.length > 0 ? (
-            currencies?.map((currency: ICurrency) => (
+          {currencies && currencies.length > 0 ? (
+            currencies.map((currency: ICurrency) => (
               <FormFieldRadio<IOnboardingFormData>
                 key={currency.id}
                 name="currency_id"

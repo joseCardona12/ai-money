@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   STATS_CARDS,
   CHART_DATA,
@@ -12,6 +12,8 @@ import {
   adaptDashboardTransactionToTransaction,
   findDashboardTransactionById,
 } from "../utils/transactionAdapter";
+import { analyticsService } from "@/services/analytics";
+import useAuthListener from "../../hooks/useAuthListener";
 
 export interface IDashboardData {
   statsCards: typeof STATS_CARDS;
@@ -43,11 +45,65 @@ export interface IUseDashboard extends IDashboardData, IDashboardActions {
 }
 
 export default function useDashboard(): IUseDashboard {
+  const { user } = useAuthListener();
   const [selectedTimeframe, setSelectedTimeframe] = useState("This year");
   const [detailsModal, setDetailsModal] = useState<IDetailsModalState>({
     isOpen: false,
     selectedTransaction: undefined,
   });
+  const [statsCards, setStatsCards] = useState(STATS_CARDS);
+
+  // Load analytics data on mount
+  useEffect(() => {
+    const loadAnalytics = async () => {
+      if (!user?.id) return;
+
+      try {
+        const response = await analyticsService.getAnalyticsByUserId(user.id);
+
+        if (response.status < 400 && response.data) {
+          const analyticsData = response.data;
+
+          // Update stats cards with analytics data
+          setStatsCards([
+            {
+              title: "Total balance",
+              amount: `$${(
+                analyticsData.total_income - analyticsData.total_expenses
+              ).toFixed(2)}`,
+              currency: "USD",
+              change: "0%",
+              changeText: "Net balance",
+              positive:
+                analyticsData.total_income >= analyticsData.total_expenses,
+            },
+            {
+              title: "Income",
+              amount: `$${analyticsData.total_income.toFixed(2)}`,
+              currency: "USD",
+              change: "0%",
+              changeText: "Total income",
+              positive: true,
+            },
+            {
+              title: "Expenses",
+              amount: `$${analyticsData.total_expenses.toFixed(2)}`,
+              currency: "USD",
+              change: "0%",
+              changeText: "Total expenses",
+              positive: false,
+            },
+          ]);
+
+          console.log("Loaded analytics:", analyticsData);
+        }
+      } catch (error) {
+        console.error("Error loading analytics:", error);
+      }
+    };
+
+    loadAnalytics();
+  }, [user?.id]);
 
   const handleQuickAction = (actionId: number) => {
     console.log(`Quick action clicked: ${actionId}`);
@@ -93,7 +149,7 @@ export default function useDashboard(): IUseDashboard {
 
   return {
     // Data
-    statsCards: STATS_CARDS,
+    statsCards,
     chartData: CHART_DATA,
     transactions: TRANSACTIONS_DATA,
     alerts: ALERTS_DATA,

@@ -1,5 +1,5 @@
 "use client";
-import { IconSearch, IconFilter, IconX } from "@tabler/icons-react";
+import { IconSearch, IconX } from "@tabler/icons-react";
 import Input from "@/ui/components/Input";
 import Select from "@/ui/components/Select";
 import { SelectOption } from "@/interfaces/selectOption";
@@ -88,9 +88,13 @@ export default function TransactionsFilters({
           className="min-w-[130px]"
         />
 
-        {/* Filter Icon */}
-        <button className="p-2 hover:bg-[var(--color-gray-light)] rounded-lg transition-colors">
-          <IconFilter size={16} style={{ color: "var(--color-text-gray)" }} />
+        {/* Clear Filters Button */}
+        <button
+          onClick={onClearFilters}
+          className="p-2 hover:bg-red-50 rounded-lg transition-colors"
+          title="Clear all filters"
+        >
+          <IconX size={16} style={{ color: "#ef4444" }} />
         </button>
       </div>
 

@@ -10,7 +10,7 @@ export const USER_MODAL_OPTIONS: IModalOption[] = [
     title: "My account",
     icon: <IconUser className="text-sm text-[var(--color-text-gray)]" />,
     text: "Profile",
-    url: "/dashboard/my-account",
+    url: "/dashboard/myaccount",
   },
   {
     title: "Settings",

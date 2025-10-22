@@ -11,7 +11,7 @@ interface IStep2FinancialGoalsProps {
 export default function Step2FinancialGoals({
   control,
   errors,
-  goalTypes,
+  goalTypes = [],
 }: IStep2FinancialGoalsProps): React.ReactNode {
   return (
     <div className="w-full max-w-full">
@@ -21,65 +21,71 @@ export default function Step2FinancialGoals({
           control={control}
           render={({ field }) => (
             <div className="flex flex-col gap-2">
-              {goalTypes.map((goal: IGoalType) => {
-                const goalId = goal.id?.toString() || "0";
-                const isSelected = field.value === goalId;
+              {goalTypes && goalTypes.length > 0 ? (
+                goalTypes.map((goal: IGoalType) => {
+                  const goalId = goal.id?.toString() || "0";
+                  const isSelected = field.value === goalId;
 
-                return (
-                  <label
-                    key={goal.id}
-                    className={`w-full flex items-start gap-3 border rounded-lg p-3 cursor-pointer transition-colors ${
-                      isSelected ? "selected-goal" : "unselected-goal"
-                    }`}
-                    style={{
-                      borderColor: isSelected
-                        ? "var(--color-blue)"
-                        : "var(--color-gray-border)",
-                      backgroundColor: isSelected
-                        ? "var(--color-blue-light)"
-                        : "transparent",
-                    }}
-                    onMouseEnter={(e) => {
-                      if (!isSelected) {
-                        e.currentTarget.style.backgroundColor =
-                          "var(--color-gray-hover)";
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (!isSelected) {
-                        e.currentTarget.style.backgroundColor = "transparent";
-                      }
-                    }}
-                  >
-                    <input
-                      type="radio"
-                      checked={isSelected}
-                      onChange={() => {
-                        field.onChange(goalId);
-                      }}
-                      className="w-4 h-4 mt-0.5 rounded-full flex-shrink-0"
+                  return (
+                    <label
+                      key={goal.id}
+                      className={`w-full flex items-start gap-3 border rounded-lg p-3 cursor-pointer transition-colors ${
+                        isSelected ? "selected-goal" : "unselected-goal"
+                      }`}
                       style={{
-                        accentColor: "var(--color-blue)",
-                        borderColor: "var(--color-gray-border)",
+                        borderColor: isSelected
+                          ? "var(--color-blue)"
+                          : "var(--color-gray-border)",
+                        backgroundColor: isSelected
+                          ? "var(--color-blue-light)"
+                          : "transparent",
                       }}
-                    />
-                    <div className="flex flex-col gap-0">
-                      <h6
-                        className="font-medium text-sm"
-                        style={{ color: "var(--color-text-black)" }}
-                      >
-                        {goal.name}
-                      </h6>
-                      <p
-                        className="text-xs mt-0.5 break-words"
-                        style={{ color: "var(--color-text-gray)" }}
-                      >
-                        {goal.description}
-                      </p>
-                    </div>
-                  </label>
-                );
-              })}
+                      onMouseEnter={(e) => {
+                        if (!isSelected) {
+                          e.currentTarget.style.backgroundColor =
+                            "var(--color-gray-hover)";
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!isSelected) {
+                          e.currentTarget.style.backgroundColor = "transparent";
+                        }
+                      }}
+                    >
+                      <input
+                        type="radio"
+                        checked={isSelected}
+                        onChange={() => {
+                          field.onChange(goalId);
+                        }}
+                        className="w-4 h-4 mt-0.5 rounded-full flex-shrink-0"
+                        style={{
+                          accentColor: "var(--color-blue)",
+                          borderColor: "var(--color-gray-border)",
+                        }}
+                      />
+                      <div className="flex flex-col gap-0">
+                        <h6
+                          className="font-medium text-sm"
+                          style={{ color: "var(--color-text-black)" }}
+                        >
+                          {goal.name}
+                        </h6>
+                        <p
+                          className="text-xs mt-0.5 break-words"
+                          style={{ color: "var(--color-text-gray)" }}
+                        >
+                          {goal.description}
+                        </p>
+                      </div>
+                    </label>
+                  );
+                })
+              ) : (
+                <p className="text-sm text-[var(--color-text-gray)]">
+                  Loading goal types...
+                </p>
+              )}
             </div>
           )}
         />

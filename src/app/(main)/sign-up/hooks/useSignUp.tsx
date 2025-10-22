@@ -11,7 +11,6 @@ import { useState } from "react";
 import { signUpService } from "../services/signUpService";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { ROUTERS } from "@/utils/constants/routers";
 
 export default function useSignUp() {
   const [remember, setRemember] = useState<boolean>(false);
@@ -42,10 +41,11 @@ export default function useSignUp() {
         return;
       }
       toast.success("Correct credentials", {
-        description: "Login successful",
+        description: "Account created successfully",
         duration: 2000,
       });
-      router.push(ROUTERS.login);
+      // Redirect to onboarding since user just registered
+      router.push("/onboarding");
     } catch (error: any) {
       console.log("error", error);
     } finally {

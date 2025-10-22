@@ -19,6 +19,8 @@ interface ITransactionModalProps {
   onSubmit: (data: ITransactionRequest) => void;
   categories: SelectOption[];
   types: SelectOption[];
+  states: SelectOption[];
+  accounts: SelectOption[];
 }
 
 export default function TransactionModal({
@@ -29,7 +31,16 @@ export default function TransactionModal({
   onSubmit,
   categories,
   types,
+  states,
+  accounts,
 }: ITransactionModalProps): React.ReactNode {
+  console.log("TransactionModal received props:", {
+    statesLength: states?.length,
+    accountsLength: accounts?.length,
+    states,
+    accounts,
+  });
+
   const title = mode === "add" ? "Add Transaction" : "Edit Transaction";
   const submitButtonText = mode === "add" ? "Add Transaction" : "Save Changes";
 
@@ -99,6 +110,26 @@ export default function TransactionModal({
           placeholder="Add notes about this transaction..."
           isOptional
           rows={3}
+        />
+
+        {/* State Field */}
+        <FormFieldSelect<ITransactionRequest>
+          label="State"
+          name="state"
+          control={control}
+          error={errors.state}
+          placeholder="Select state"
+          options={states}
+        />
+
+        {/* Account Field */}
+        <FormFieldSelect<ITransactionRequest>
+          label="Account"
+          name="account"
+          control={control}
+          error={errors.account}
+          placeholder="Select account"
+          options={accounts}
         />
 
         {/* Action Buttons */}

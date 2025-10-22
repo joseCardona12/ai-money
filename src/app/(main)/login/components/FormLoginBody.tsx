@@ -24,7 +24,7 @@ export default function FormLoginBody({
   loading,
 }: IFormLoginBodyProps): React.ReactNode {
   return (
-    <div className="flex flex-col gap-4">
+    <div className={`flex flex-col gap-4 ${loading && "opacity-50"}`}>
       <FormField<ILoginRequest>
         label="Email address"
         name="email"

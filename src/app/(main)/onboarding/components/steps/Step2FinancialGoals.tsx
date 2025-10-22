@@ -1,33 +1,33 @@
-import { IOnboardingRequest } from "@/interfaces/onboarding";
+import { IOnboardingFormData } from "@/interfaces/onboarding";
 import { Control, FieldErrors, Controller } from "react-hook-form";
-import {
-  FINANCIAL_GOALS_OPTIONS,
-  IFinancialGoalOption,
-} from "../../utils/constants/onboardingOptions";
+import { IGoalType } from "@/interfaces/goalType";
 
 interface IStep2FinancialGoalsProps {
-  control: Control<IOnboardingRequest>;
-  errors: FieldErrors<IOnboardingRequest>;
+  control: Control<IOnboardingFormData>;
+  errors: FieldErrors<IOnboardingFormData>;
+  goalTypes: IGoalType[];
 }
 
 export default function Step2FinancialGoals({
   control,
   errors,
+  goalTypes,
 }: IStep2FinancialGoalsProps): React.ReactNode {
   return (
     <div className="w-full max-w-full">
       <div>
         <Controller
-          name="financialGoals"
+          name="goal_type_id"
           control={control}
           render={({ field }) => (
             <div className="flex flex-col gap-2">
-              {FINANCIAL_GOALS_OPTIONS.map((goal: IFinancialGoalOption) => {
-                const isSelected = field.value.includes(goal.value);
+              {goalTypes.map((goal: IGoalType) => {
+                const goalId = goal.id?.toString() || "0";
+                const isSelected = field.value === goalId;
 
                 return (
                   <label
-                    key={goal.value}
+                    key={goal.id}
                     className={`w-full flex items-start gap-3 border rounded-lg p-3 cursor-pointer transition-colors ${
                       isSelected ? "selected-goal" : "unselected-goal"
                     }`}
@@ -52,18 +52,12 @@ export default function Step2FinancialGoals({
                     }}
                   >
                     <input
-                      type="checkbox"
+                      type="radio"
                       checked={isSelected}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          field.onChange([...field.value, goal.value]);
-                        } else {
-                          field.onChange(
-                            field.value.filter((v: string) => v !== goal.value)
-                          );
-                        }
+                      onChange={() => {
+                        field.onChange(goalId);
                       }}
-                      className="w-4 h-4 mt-0.5 rounded flex-shrink-0"
+                      className="w-4 h-4 mt-0.5 rounded-full flex-shrink-0"
                       style={{
                         accentColor: "var(--color-blue)",
                         borderColor: "var(--color-gray-border)",
@@ -74,7 +68,7 @@ export default function Step2FinancialGoals({
                         className="font-medium text-sm"
                         style={{ color: "var(--color-text-black)" }}
                       >
-                        {goal.label}
+                        {goal.name}
                       </h6>
                       <p
                         className="text-xs mt-0.5 break-words"
@@ -89,9 +83,9 @@ export default function Step2FinancialGoals({
             </div>
           )}
         />
-        {errors.financialGoals && (
+        {errors.goal_type_id && (
           <p className="text-sm mt-2" style={{ color: "var(--color-red)" }}>
-            {errors.financialGoals.message}
+            {errors.goal_type_id.message}
           </p>
         )}
       </div>

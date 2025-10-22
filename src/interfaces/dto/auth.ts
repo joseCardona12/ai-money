@@ -7,5 +7,5 @@ export interface ILoginRequestDto {
 export interface ILoginResponseDto {
   status: number;
   message: string;
-  data: [];
+  data: unknown;
 }

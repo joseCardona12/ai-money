@@ -1,3 +1,4 @@
+"use client";
 import z from "zod";
 import {
   CURRENT_FORM_SIGN_UP,
@@ -7,9 +8,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ISignUpRequest } from "@/interfaces/signUp";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import { signUpService } from "../services/signUpService";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { ROUTERS } from "@/utils/constants/routers";
 
 export default function useSignUp() {
   const [remember, setRemember] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const router = useRouter();
   const {
     control,
     handleSubmit,
@@ -23,7 +30,27 @@ export default function useSignUp() {
   });
 
   const handleSignUp = async (data: ISignUpRequest): Promise<void> => {
-    console.log("data", data);
+    setLoading(true);
+    try {
+      const response = await signUpService.signUp(data);
+      if (response.status >= 400) {
+        toast.error("Error", {
+          description: response.message,
+          duration: 2000,
+        });
+        setLoading(false);
+        return;
+      }
+      toast.success("Correct credentials", {
+        description: "Login successful",
+        duration: 2000,
+      });
+      router.push(ROUTERS.login);
+    } catch (error: any) {
+      console.log("error", error);
+    } finally {
+      setLoading(false);
+    }
   };
   return {
     control,
@@ -33,5 +60,6 @@ export default function useSignUp() {
     setError,
     handleSignUp,
     setRemember,
+    loading,
   };
 }

@@ -1,5 +1,9 @@
 import { IModalOption } from "@/interfaces/ModalOption";
-import { IconSettings, IconUser } from "../../../../../../public/icons";
+import {
+  IconSettings,
+  IconUser,
+  IconLogout,
+} from "../../../../../../public/icons";
 
 export const USER_MODAL_OPTIONS: IModalOption[] = [
   {
@@ -13,5 +17,11 @@ export const USER_MODAL_OPTIONS: IModalOption[] = [
     icon: <IconSettings className="text-sm text-[var(--color-text-gray)]" />,
     text: "Settings",
     url: "/dashboard/settings",
+  },
+  {
+    title: "Logout",
+    icon: <IconLogout className="text-sm text-red-500" />,
+    text: "Logout",
+    url: "/logout",
   },
 ];

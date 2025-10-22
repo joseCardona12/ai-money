@@ -13,10 +13,14 @@ export default function OnboardingProgress(): React.ReactNode {
     control,
     handleSubmit,
     handleOnboardingSubmit,
+    handleSkip,
     handleNext,
     handleBack,
     isLastStep,
     isFirstStep,
+    currencies,
+    goalTypes,
+    loading,
   } = useOnboardingProgress();
 
   const currentStepData = ONBOARDING_STEPS.find((s) => s.step === step);
@@ -38,7 +42,13 @@ export default function OnboardingProgress(): React.ReactNode {
           </p>
         </div>
 
-        <OnboardingProgressBody errors={errors} control={control} step={step} />
+        <OnboardingProgressBody
+          errors={errors}
+          control={control}
+          step={step}
+          currencies={currencies}
+          goalTypes={goalTypes}
+        />
 
         <div className="flex flex-col gap-4">
           <div className="flex items-center justify-between gap-2 w-full">
@@ -61,9 +71,10 @@ export default function OnboardingProgress(): React.ReactNode {
                 type="submit"
                 variant="primary"
                 className="flex items-center gap-2"
+                disabled={loading}
               >
-                Get Started
-                <IconArrowRight />
+                {loading ? "Setting up..." : "Get Started"}
+                {!loading && <IconArrowRight />}
               </Button>
             ) : (
               <Button
@@ -83,10 +94,11 @@ export default function OnboardingProgress(): React.ReactNode {
               <Button
                 type="button"
                 className="w-full"
-                onClick={() => setStep(4)}
+                onClick={handleSkip}
                 variant="outline"
+                disabled={loading}
               >
-                Skip for now
+                {loading ? "Skipping..." : "Skip for now"}
               </Button>
             </div>
           )}

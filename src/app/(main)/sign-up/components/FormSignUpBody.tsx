@@ -10,15 +10,17 @@ interface IFormSignUpBodyProps {
   errors: FieldErrors<ISignUpRequest>;
   setRemember: (value: boolean) => void;
   remember: boolean;
+  loading: boolean;
 }
 export default function FormSignUpBody({
   errors,
   control,
   setRemember,
   remember,
+  loading,
 }: IFormSignUpBodyProps): React.ReactNode {
   return (
-    <div className="flex flex-col gap-4">
+    <div className={`flex flex-col gap-4 ${loading && "opacity-50"}`}>
       <FormField<ISignUpRequest>
         label="Full name"
         name="fullName"
@@ -26,7 +28,6 @@ export default function FormSignUpBody({
         placeholder="name"
         error={errors.fullName}
         control={control}
-        isOptional
       />
       <FormField<ISignUpRequest>
         label="Email address"

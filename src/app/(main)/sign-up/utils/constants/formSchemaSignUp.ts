@@ -2,12 +2,12 @@ import { ISignUpRequest } from "@/interfaces/signUp";
 import z from "zod";
 
 export const formSchemaSignUp = z.object({
-  fullName: z.string().optional(),
+  fullName: z.string().min(2, "Full name is required").max(250),
   email: z.string().email("Invalid email format").min(2).max(250),
   password: z
     .string()
     .min(8, "Expected string to have >=8 characters")
-    .max(12, "Expected string to have <12 characters")
+    .max(20, "Expected string to have <20 characters")
     .regex(/[A-Z]/, "Must include a capital letter")
     .regex(/[a-z]/, "Must include a lowecase letter"),
 });

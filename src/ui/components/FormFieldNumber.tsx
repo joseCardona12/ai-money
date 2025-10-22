@@ -71,12 +71,8 @@ export default function FormFieldNumber<T extends FieldValues>({
             max={max}
             onChange={(e) => {
               const value = e.target.value;
-              if (value === "") {
-                field.onChange(isOptional ? undefined : 0);
-              } else {
-                const numValue = parseFloat(value);
-                field.onChange(isNaN(numValue) ? 0 : numValue);
-              }
+              // Keep value as string for form data
+              field.onChange(value);
             }}
             value={field.value === undefined ? "" : field.value}
           />

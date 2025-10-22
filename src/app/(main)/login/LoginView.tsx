@@ -1,12 +1,12 @@
 "use client";
-import Button from "@/ui/components/Button";
 import Logo from "@/ui/components/Logo";
 import FormLogin from "./components/FormLogin";
 import FormLoginRight from "./components/FormLoginRight";
+import PublicRoute from "@/components/PublicRoute";
 
 export default function LoginView(): React.ReactNode {
   return (
-    <div>
+    <PublicRoute>
       <main className="w-full bg-red-300 h-[100vh] flex">
         <section className="w-[50%] bg-[var(--color-gray)] h-[100vh] flex justify-center">
           <div className="w-[60%] flex flex-col gap-4 justify-center">
@@ -20,6 +20,6 @@ export default function LoginView(): React.ReactNode {
           </div>
         </section>
       </main>
-    </div>
+    </PublicRoute>
   );
 }

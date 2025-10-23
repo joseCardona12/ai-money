@@ -26,7 +26,6 @@ class TransactionStateService implements ITransactionStateService {
     try {
       return await this.httpClient.get<IResponseDto>("transaction-states");
     } catch (error) {
-      console.error("Error fetching transaction states:", error);
       throw error;
     }
   }
@@ -40,11 +39,9 @@ class TransactionStateService implements ITransactionStateService {
         `transaction-states/${stateId}`
       );
     } catch (error) {
-      console.error("Error fetching transaction state:", error);
       throw error;
     }
   }
 }
 
 export const transactionStateService = new TransactionStateService();
-

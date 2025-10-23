@@ -17,11 +17,9 @@ class TokenRefreshService implements ITokenRefreshService {
       const expirationTime = this.getTokenExpirationTime(token);
       if (!expirationTime) return true;
 
-      // Add 60 seconds buffer to refresh before actual expiration
-      const bufferTime = 60 * 1000; // 60 seconds in milliseconds
+      const bufferTime = 60 * 1000;
       return Date.now() >= expirationTime - bufferTime;
-    } catch (error) {
-      console.error("Error checking token expiration:", error);
+    } catch (_error) {
       return true;
     }
   }
@@ -36,7 +34,7 @@ class TokenRefreshService implements ITokenRefreshService {
 
       // Decode the payload (second part)
       const payload = JSON.parse(atob(parts[1]));
-      
+
       // JWT exp is in seconds, convert to milliseconds
       if (payload.exp) {
         return payload.exp * 1000;
@@ -54,7 +52,7 @@ class TokenRefreshService implements ITokenRefreshService {
   public async refreshToken(): Promise<IResponseDto> {
     try {
       const token = localStorage.getItem("token");
-      
+
       if (!token) {
         throw new Error("No token found in localStorage");
       }
@@ -87,17 +85,13 @@ class TokenRefreshService implements ITokenRefreshService {
 
       throw new Error(data.message || "Failed to refresh token");
     } catch (error) {
-      console.error("Error refreshing token:", error);
-      
-      // Clear token and redirect to login on refresh failure
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       window.location.href = "/login";
-      
+
       throw error;
     }
   }
 }
 
 export const tokenRefreshService = new TokenRefreshService();
-

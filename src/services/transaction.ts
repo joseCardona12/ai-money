@@ -6,6 +6,29 @@ import {
 } from "@/interfaces/transaction";
 import { HTTPClient } from "@/utils/httpClient";
 
+export interface IMonthlyStatsComparison {
+  currentMonth: {
+    totalAmount: number;
+    totalIncome: number;
+    totalExpenses: number;
+    balance: number;
+  };
+  lastMonth: {
+    totalAmount: number;
+    totalIncome: number;
+    totalExpenses: number;
+    balance: number;
+  } | null;
+  changes: {
+    totalAmountChange: string | null;
+    totalIncomeChange: string | null;
+    totalExpensesChange: string | null;
+    totalAmountChangePositive: boolean;
+    totalIncomeChangePositive: boolean;
+    totalExpensesChangePositive: boolean;
+  };
+}
+
 export interface ITransactionService {
   getTransactionsByUserId(userId: number): Promise<IResponseDto>;
   getTransactionById(transactionId: number): Promise<IResponseDto>;
@@ -17,6 +40,7 @@ export interface ITransactionService {
     transaction: IUpdateTransactionRequest
   ): Promise<IResponseDto>;
   deleteTransaction(transactionId: number): Promise<IResponseDto>;
+  getMonthlyStatsComparison(userId: number): Promise<IResponseDto>;
 }
 
 class TransactionService implements ITransactionService {
@@ -107,6 +131,18 @@ class TransactionService implements ITransactionService {
       // Note: DELETE method not available in HTTPClient yet
       // This is a placeholder for future implementation
       throw new Error("DELETE method not implemented in HTTPClient");
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  public async getMonthlyStatsComparison(
+    userId: number
+  ): Promise<IResponseDto> {
+    try {
+      return await this.httpClient.get<IResponseDto>(
+        `transactions/user/${userId}/monthly-stats`
+      );
     } catch (error) {
       throw error;
     }

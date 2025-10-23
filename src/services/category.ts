@@ -28,7 +28,6 @@ class CategoryService implements ICategoryService {
     try {
       return await this.httpClient.get<IResponseDto>("categories");
     } catch (error) {
-      console.error("Error fetching categories:", error);
       throw error;
     }
   }
@@ -42,11 +41,9 @@ class CategoryService implements ICategoryService {
         `categories/${categoryId}`
       );
     } catch (error) {
-      console.error("Error fetching category:", error);
       throw error;
     }
   }
 }
 
 export const categoryService = new CategoryService();
-

@@ -28,6 +28,11 @@ export default function Select({
     (option) => option.value === selectedValue
   );
 
+  // Sync selectedValue with value prop when it changes
+  useEffect(() => {
+    setSelectedValue(value || "");
+  }, [value]);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -93,39 +98,47 @@ export default function Select({
         <div
           className={`
             ${styles.dropdown}
-            absolute z-50 w-full
+            absolute top-full left-0 z-50 w-full
             border border-[var(--color-gray-border)] rounded-lg shadow-lg
             max-h-60 overflow-auto
           `}
           style={{ backgroundColor: "var(--color-white)" }}
         >
-          {options.map((option) => (
-            <button
-              key={option.value}
-              type="button"
-              onClick={() => handleSelect(option.value)}
-              className={`
-                w-full px-3 py-2 text-left text-sm
-                hover:bg-gray-50 focus:outline-none focus:bg-gray-50
-                transition-colors duration-150
-                ${
-                  selectedValue === option.value
-                    ? "bg-[var(--color-blue)] text-white focus:bg-[var(--color-blue-hover)]"
-                    : ""
-                }
-                ${option === options[0] ? "rounded-t-lg" : ""}
-                ${option === options[options.length - 1] ? "rounded-b-lg" : ""}
-              `}
-              style={{
-                color:
-                  selectedValue === option.value
-                    ? "white"
-                    : "var(--color-text-black)",
-              }}
-            >
-              {option.label}
-            </button>
-          ))}
+          {options && options.length > 0 ? (
+            options.map((option) => (
+              <button
+                key={option.value}
+                type="button"
+                onClick={() => handleSelect(option.value)}
+                className={`
+                  w-full px-3 py-2 text-left text-sm
+                  hover:bg-gray-50 focus:outline-none focus:bg-gray-50
+                  transition-colors duration-150
+                  ${
+                    selectedValue === option.value
+                      ? "bg-[var(--color-blue)] text-white focus:bg-[var(--color-blue-hover)]"
+                      : ""
+                  }
+                  ${option === options[0] ? "rounded-t-lg" : ""}
+                  ${
+                    option === options[options.length - 1] ? "rounded-b-lg" : ""
+                  }
+                `}
+                style={{
+                  color:
+                    selectedValue === option.value
+                      ? "white"
+                      : "var(--color-text-black)",
+                }}
+              >
+                {option.label}
+              </button>
+            ))
+          ) : (
+            <div className="px-3 py-2 text-sm text-gray-500">
+              No options available
+            </div>
+          )}
         </div>
       )}
     </div>

@@ -45,7 +45,6 @@ class AccountService implements IAccountService {
     try {
       return await this.httpClient.get<IResponseDto>("accounts");
     } catch (error) {
-      console.error("Error fetching accounts:", error);
       throw error;
     }
   }
@@ -57,7 +56,6 @@ class AccountService implements IAccountService {
     try {
       return await this.httpClient.get<IResponseDto>(`accounts/user/${userId}`);
     } catch (error) {
-      console.error("Error fetching user accounts:", error);
       throw error;
     }
   }
@@ -69,7 +67,6 @@ class AccountService implements IAccountService {
     try {
       return await this.httpClient.get<IResponseDto>(`accounts/${accountId}`);
     } catch (error) {
-      console.error("Error fetching account:", error);
       throw error;
     }
   }
@@ -84,7 +81,6 @@ class AccountService implements IAccountService {
         account
       );
     } catch (error) {
-      console.error("Error creating account:", error);
       throw error;
     }
   }
@@ -102,7 +98,6 @@ class AccountService implements IAccountService {
         account
       );
     } catch (error) {
-      console.error("Error updating account:", error);
       throw error;
     }
   }
@@ -112,10 +107,8 @@ class AccountService implements IAccountService {
    */
   public async deleteAccount(accountId: number): Promise<IResponseDto> {
     try {
-      // Note: DELETE method not available in HTTPClient yet
       throw new Error("DELETE method not implemented in HTTPClient");
     } catch (error) {
-      console.error("Error deleting account:", error);
       throw error;
     }
   }

@@ -20,10 +20,11 @@ export default function useVerifyPhone() {
     reValidateMode: "onChange",
   });
 
-  const handleVerifyPhone = (data: IVerifyPhoneRequest) => {
-    console.log("data", data);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleVerifyPhone = (_data: IVerifyPhoneRequest) => {
+    // TODO: Implement phone verification logic
   };
-  
+
   return {
     control,
     handleSubmit,

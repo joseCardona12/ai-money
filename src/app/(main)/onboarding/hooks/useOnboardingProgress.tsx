@@ -27,15 +27,14 @@ export default function useOnboardingProgress() {
   const [userId, setUserId] = useState<number | null>(null);
   const router = useRouter();
 
-  // Get user_id from localStorage on mount
   useEffect(() => {
     const userStr = localStorage.getItem("user");
     if (userStr) {
       try {
         const user = JSON.parse(userStr);
         setUserId(user.id);
-      } catch (error) {
-        console.log("Error parsing user from localStorage:", error);
+      } catch (_error) {
+        // Error parsing user from localStorage
       }
     }
   }, []);

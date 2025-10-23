@@ -34,13 +34,6 @@ export default function TransactionModal({
   states,
   accounts,
 }: ITransactionModalProps): React.ReactNode {
-  console.log("TransactionModal received props:", {
-    statesLength: states?.length,
-    accountsLength: accounts?.length,
-    states,
-    accounts,
-  });
-
   const title = mode === "add" ? "Add Transaction" : "Edit Transaction";
   const submitButtonText = mode === "add" ? "Add Transaction" : "Save Changes";
 

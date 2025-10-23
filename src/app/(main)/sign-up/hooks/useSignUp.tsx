@@ -46,8 +46,8 @@ export default function useSignUp() {
       });
       // Redirect to onboarding since user just registered
       router.push("/onboarding");
-    } catch (error: any) {
-      console.log("error", error);
+    } catch (_error) {
+      // Error handling is done via toast notification above
     } finally {
       setLoading(false);
     }

@@ -26,7 +26,6 @@ class TransactionTypeService implements ITransactionTypeService {
     try {
       return await this.httpClient.get<IResponseDto>("transaction-types");
     } catch (error) {
-      console.error("Error fetching transaction types:", error);
       throw error;
     }
   }
@@ -40,11 +39,9 @@ class TransactionTypeService implements ITransactionTypeService {
         `transaction-types/${typeId}`
       );
     } catch (error) {
-      console.error("Error fetching transaction type:", error);
       throw error;
     }
   }
 }
 
 export const transactionTypeService = new TransactionTypeService();
-

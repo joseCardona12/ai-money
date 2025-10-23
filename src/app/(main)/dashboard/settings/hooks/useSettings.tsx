@@ -76,11 +76,7 @@ export default function useSettings(): IUseSettings {
   const exportData = async (format: string): Promise<void> => {
     setIsLoading(true);
     try {
-      // Simulate API call for data export
       await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      // Here you would make the actual API call to export data
-      console.log(`Exporting data in ${format} format...`);
 
       // Simulate file download
       const filename = `financial-data-${

@@ -54,34 +54,34 @@ export default function useWallet(): IUseWallet {
     openAddModal();
   };
 
-  const handleAccountClick = (accountId: number) => {
-    console.log("Account clicked:", accountId);
-    // Aquí iría la lógica para manejar click en cuenta
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleAccountClick = (_accountId: number) => {
+    // TODO: Implement account click handler
   };
 
-  const handleActivityClick = (activityId: number) => {
-    console.log("Activity clicked:", activityId);
-    // Aquí iría la lógica para manejar click en actividad
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleActivityClick = (_activityId: number) => {
+    // TODO: Implement activity click handler
   };
 
-  const handleViewAccountDetails = (accountId: number) => {
-    console.log("View account details:", accountId);
-    // Aquí iría la lógica para ver detalles de la cuenta
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleViewAccountDetails = (_accountId: number) => {
+    // TODO: Implement view account details handler
   };
 
-  const handleEditAccount = (accountId: number) => {
-    console.log("Edit account:", accountId);
-    // Aquí iría la lógica para editar la cuenta
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleEditAccount = (_accountId: number) => {
+    // TODO: Implement edit account handler
   };
 
-  const handleSetPrimaryAccount = (accountId: number) => {
-    console.log("Set primary account:", accountId);
-    // Aquí iría la lógica para establecer como cuenta principal
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleSetPrimaryAccount = (_accountId: number) => {
+    // TODO: Implement set primary account handler
   };
 
-  const handleDeleteAccount = (accountId: number) => {
-    console.log("Delete account:", accountId);
-    // Aquí iría la lógica para eliminar la cuenta
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleDeleteAccount = (_accountId: number) => {
+    // TODO: Implement delete account handler
   };
 
   const openAddModal = () => {
@@ -108,9 +108,9 @@ export default function useWallet(): IUseWallet {
     });
   };
 
-  const handleModalSubmit = (data: IAccountRequest) => {
-    console.log("Account submitted:", data);
-    // Aquí iría la lógica para guardar la cuenta
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleModalSubmit = (_data: IAccountRequest) => {
+    // TODO: Implement account submission logic
     closeModal();
   };
 

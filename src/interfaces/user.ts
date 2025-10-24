@@ -1,14 +1,13 @@
 export interface IUser {
-  id?: number;
+  id: number;
+  fullName: string;
   email: string;
   password: string;
-  fullName: string;
   phone_number: string;
   address: string;
   bio: string;
   profile_picture: string;
-  join_date: Date;
+  join_date: string;
   role_id: number;
   provider_id: number;
-  plan_id: number;
 }

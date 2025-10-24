@@ -4,4 +4,6 @@ export interface ITransactionRequest {
   amount: number;
   date: string;
   description?: string;
+  state?: string;
+  account?: string;
 }

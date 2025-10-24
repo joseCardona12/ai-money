@@ -9,7 +9,9 @@ export default function FormLoginHeader({
   loading,
 }: IFormLoginHeaderProps): React.ReactNode {
   return (
-    <div className="form-header flex flex-col gap-6">
+    <div
+      className={`form-header flex flex-col gap-6 ${loading && "opacity-50"}`}
+    >
       <div>
         <h1 className="text-[1.8rem] font-bold">Welcome back</h1>
         <p className="text-[var(--color-text-gray)] text-sm">

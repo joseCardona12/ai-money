@@ -1,4 +1,4 @@
-import { IOnboardingRequest } from "@/interfaces/onboarding";
+import { IOnboardingFormData } from "@/interfaces/onboarding";
 import FormFieldRadio from "@/ui/components/FormFieldRadio";
 import { Control, FieldErrors } from "react-hook-form";
 import {
@@ -7,8 +7,8 @@ import {
 } from "../../utils/constants/onboardingOptions";
 
 interface IStep3BudgetPreferencesProps {
-  control: Control<IOnboardingRequest>;
-  errors: FieldErrors<IOnboardingRequest>;
+  control: Control<IOnboardingFormData>;
+  errors: FieldErrors<IOnboardingFormData>;
 }
 
 export default function Step3BudgetPreferences({
@@ -23,9 +23,9 @@ export default function Step3BudgetPreferences({
             (preference: IBudgetPreferenceOption) => (
               <FormFieldRadio<IOnboardingRequest>
                 key={preference.value}
-                name="budgetPreference"
+                name="budget_preference_id"
                 type="radio"
-                error={errors.budgetPreference}
+                error={errors.budget_preference_id}
                 control={control}
                 text={
                   <div className="flex flex-col gap-0">

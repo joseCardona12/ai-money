@@ -1,13 +1,16 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { IUseSettings, IRegionalSettings } from "../types/settings";
 import {
   DEFAULT_REGIONAL_SETTINGS,
   SETTINGS_CONTENT_TABS,
 } from "../utils/constants/settingsData";
 import { IContentTab } from "@/interfaces/contentTab";
+import { settingsService } from "@/services/settings";
+import useAuthListener from "../../hooks/useAuthListener";
 
 export default function useSettings(): IUseSettings {
+  const { user } = useAuthListener();
   const [activeTab, setActiveTab] = useState("general");
   const [regionalSettings, setRegionalSettings] = useState<IRegionalSettings>(
     DEFAULT_REGIONAL_SETTINGS
@@ -17,6 +20,32 @@ export default function useSettings(): IUseSettings {
   const [contentTabs, setContentTabs] = useState<IContentTab[]>(
     SETTINGS_CONTENT_TABS
   );
+
+  // Load user settings on mount
+  useEffect(() => {
+    const loadSettings = async () => {
+      if (!user?.id) return;
+
+      setIsLoading(true);
+      try {
+        const response = await settingsService.getSettingByUserId(user.id);
+
+        if (response.status < 400 && response.data) {
+          const userSettings = response.data;
+
+          // Map backend settings to regional settings
+          // You may need to adjust this based on your actual backend response structure
+          console.log("Loaded settings:", userSettings);
+        }
+      } catch (error) {
+        console.error("Error loading settings:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadSettings();
+  }, [user?.id]);
 
   const updateRegionalSettings = (settings: Partial<IRegionalSettings>) => {
     setRegionalSettings((prev) => ({
@@ -47,11 +76,7 @@ export default function useSettings(): IUseSettings {
   const exportData = async (format: string): Promise<void> => {
     setIsLoading(true);
     try {
-      // Simulate API call for data export
       await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      // Here you would make the actual API call to export data
-      console.log(`Exporting data in ${format} format...`);
 
       // Simulate file download
       const filename = `financial-data-${

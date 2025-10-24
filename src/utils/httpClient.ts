@@ -1,3 +1,5 @@
+import { tokenRefreshService } from "@/services/tokenRefresh";
+
 export class HTTPClient {
   private protocol: string = "http";
   private host: string = "localhost";
@@ -93,5 +95,18 @@ export class HTTPClient {
     });
     console.log("response", response);
     return await this.managementError(response);
+  }
+
+  async put<B, T>(url: string, body: B): Promise<T> {
+    await this.ensureValidToken();
+
+    const token = localStorage.getItem("token");
+    const headers = this.getHeaders(token);
+    const response = await fetch(`${this.baseUrl}/${url}`, {
+      headers,
+      method: "PUT",
+      body: JSON.stringify(body),
+    });
+    return await response.json();
   }
 }

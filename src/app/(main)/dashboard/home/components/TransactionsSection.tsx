@@ -22,7 +22,7 @@ export default function TransactionsSection({
 }: TransactionsSectionProps): React.ReactNode {
   return (
     <div
-      className="p-6 rounded-xl border h-fit border-[var(--color-gray-border)]"
+      className="p-6 rounded-xl border h-full border-[var(--color-gray-border)]"
       style={{ backgroundColor: "var(--color-white)" }}
     >
       <RecentTransactionHeader

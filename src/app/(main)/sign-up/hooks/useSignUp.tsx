@@ -1,3 +1,4 @@
+"use client";
 import z from "zod";
 import {
   CURRENT_FORM_SIGN_UP,

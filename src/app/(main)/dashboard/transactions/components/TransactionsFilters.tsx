@@ -1,5 +1,5 @@
 "use client";
-import { IconSearch, IconFilter, IconX } from "@tabler/icons-react";
+import { IconSearch, IconX } from "@tabler/icons-react";
 import Input from "@/ui/components/Input";
 import Select from "@/ui/components/Select";
 import { SelectOption } from "@/interfaces/selectOption";
@@ -41,18 +41,18 @@ export default function TransactionsFilters({
   };
 
   return (
-    <div className="p-6 rounded-xl border border-[var(--color-gray-border)] bg-white">
+    <div className="p-6 rounded-xl border border-[var(--color-gray-border)] bg-white overflow-visible">
       {/* Main Filter Row */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 overflow-visible">
         {/* Search Bar */}
-        <div className="relative flex-1 max-w-md">
+        <div className="relative flex-1">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <IconSearch size={16} style={{ color: "var(--color-text-gray)" }} />
           </div>
           <Input
             type="text"
             placeholder="Search transactions..."
-            className="pl-10 text-sm"
+            className="pl-10 text-sm w-full"
             value={searchTerm}
             onChange={(e) => onSearch(e.target.value)}
           />
@@ -88,9 +88,13 @@ export default function TransactionsFilters({
           className="min-w-[130px]"
         />
 
-        {/* Filter Icon */}
-        <button className="p-2 hover:bg-[var(--color-gray-light)] rounded-lg transition-colors">
-          <IconFilter size={16} style={{ color: "var(--color-text-gray)" }} />
+        {/* Clear Filters Button */}
+        <button
+          onClick={onClearFilters}
+          className="p-2 hover:bg-red-50 rounded-lg transition-colors"
+          title="Clear all filters"
+        >
+          <IconX size={16} style={{ color: "#ef4444" }} />
         </button>
       </div>
 

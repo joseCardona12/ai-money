@@ -6,12 +6,16 @@ export const transactionFormSchema = z.object({
   amount: z.number().min(0.01, "Amount must be greater than 0"),
   date: z.string().min(1, "Date is required"),
   description: z.string().optional(),
+  state: z.string().min(1, "State is required"),
+  account: z.string().min(1, "Account is required"),
 });
 
 export const CURRENT_FORM_TRANSACTION = {
   type: "",
   category: "",
   amount: 0,
-  date: new Date().toISOString().split('T')[0],
+  date: new Date().toISOString().split("T")[0],
   description: "",
+  state: "",
+  account: "",
 };

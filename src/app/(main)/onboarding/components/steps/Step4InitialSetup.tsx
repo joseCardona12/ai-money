@@ -1,10 +1,10 @@
-import { IOnboardingRequest } from "@/interfaces/onboarding";
+import { IOnboardingFormData } from "@/interfaces/onboarding";
 import FormFieldNumber from "@/ui/components/FormFieldNumber";
 import { Control, FieldErrors } from "react-hook-form";
 
 interface IStep4InitialSetupProps {
-  control: Control<IOnboardingRequest>;
-  errors: FieldErrors<IOnboardingRequest>;
+  control: Control<IOnboardingFormData>;
+  errors: FieldErrors<IOnboardingFormData>;
 }
 
 export default function Step4InitialSetup({
@@ -14,11 +14,11 @@ export default function Step4InitialSetup({
   return (
     <div className="w-full max-w-full">
       <div className="mb-6">
-        <FormFieldNumber<IOnboardingRequest>
+        <FormFieldNumber<IOnboardingFormData>
           label="Current Total Balance"
-          name="currentBalance"
+          name="initial_balance"
           placeholder="10000"
-          error={errors.currentBalance}
+          error={errors.initial_balance}
           control={control}
           min={0}
         />

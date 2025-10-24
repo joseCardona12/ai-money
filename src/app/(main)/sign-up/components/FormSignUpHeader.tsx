@@ -2,9 +2,16 @@ import Button from "@/ui/components/Button";
 import { IconGithub, IconGoogle } from "../../../../../public/icons";
 import LineOr from "@/ui/components/LineOr";
 
-export default function FormSignUpHeader(): React.ReactNode {
+interface IFormSignUpHeaderProps {
+  loading: boolean;
+}
+export default function FormSignUpHeader({
+  loading,
+}: IFormSignUpHeaderProps): React.ReactNode {
   return (
-    <div className="form-header flex flex-col gap-6">
+    <div
+      className={`form-header flex flex-col gap-6 ${loading && "opacity-50"}`}
+    >
       <div>
         <h1 className="text-[1.8rem] font-bold">Create your account</h1>
         <p className="text-[var(--color-text-gray)] text-sm">

@@ -52,7 +52,7 @@ export default function TransactionsContent({
 
       {/* Filters */}
       <TransactionsFilters
-        searchTerm={transactionsData.filters.searchTerm}
+        searchTerm={transactionsData.searchInputValue}
         categories={transactionsData.categories}
         types={transactionsData.types}
         timePeriods={transactionsData.timePeriods}
@@ -78,6 +78,7 @@ export default function TransactionsContent({
         onDeleteTransaction={transactionsData.handleDeleteTransaction}
         onViewDetails={transactionsData.handleViewDetails}
         onDownloadReceipt={transactionsData.handleDownloadReceipt}
+        isLoading={transactionsData.isLoading}
       />
 
       {/* Transaction Modal */}
@@ -89,6 +90,8 @@ export default function TransactionsContent({
         onSubmit={transactionsData.handleModalSubmit}
         categories={transactionsData.categories}
         types={transactionsData.types}
+        states={transactionsData.states}
+        accounts={transactionsData.accounts}
       />
 
       {/* Transaction Details Modal */}

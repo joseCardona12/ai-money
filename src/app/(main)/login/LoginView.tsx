@@ -1,5 +1,4 @@
 "use client";
-import Button from "@/ui/components/Button";
 import Logo from "@/ui/components/Logo";
 import FormLogin from "./components/FormLogin";
 import FormLoginRight from "./components/FormLoginRight";

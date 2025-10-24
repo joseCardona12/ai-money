@@ -10,6 +10,7 @@ import {
   IconHelp,
   IconLogout,
   IconMoon,
+  IconUser,
 } from "@tabler/icons-react";
 
 export const MENU_ITEMS = [
@@ -24,6 +25,7 @@ export const MENU_ITEMS = [
   { icon: IconChartBar, label: "Budget", href: "/dashboard/budget" },
   { icon: IconChartPie, label: "Analytics", href: "/dashboard/analytics" },
   { icon: IconRobot, label: "AI Assistant", href: "/dashboard/ai-assistant" },
+  { icon: IconUser, label: "My Account", href: "/dashboard/myaccount" },
   { icon: IconSettings, label: "Settings", href: "/dashboard/settings" },
 ];
 

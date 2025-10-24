@@ -12,6 +12,10 @@ export default function ModalOption({
 }: IModalOptionProps): React.ReactNode {
   const router = useRouter();
 
+  const handleOptionClick = (option: IModalOption) => {
+    router.push(option.url);
+  };
+
   return (
     <div className="absolute top-12 right-0 z-100">
       <div className="bg-[var(--color-gray)] border border-[var(--color-gray-border)] rounded-lg w-[200px] shadow-md">
@@ -22,18 +26,18 @@ export default function ModalOption({
           {options.map((option: IModalOption, index: number) => (
             <li
               key={index}
-              onClick={() => router.push(option.url)}
-              className="flex items-center gap-2 p-2 pl-4 text-sm text-[var(--color-text-gray)] hover:bg-[var(--color-gray-hover)] cursor-pointer"
+              onClick={() => handleOptionClick(option)}
+              className={`flex items-center gap-2 p-2 pl-4 text-sm hover:bg-[var(--color-gray-hover)] cursor-pointer ${
+                option.url === "/logout"
+                  ? "text-red-500"
+                  : "text-[var(--color-text-gray)]"
+              }`}
             >
               <span>{option.icon}</span>
               {option.text}
             </li>
           ))}
         </ul>
-        <div className="p-2 pl-4 flex items-center gap-2 text-[var(--color-text-gray)] cursor-pointer text-sm">
-          <IconLogout />
-          <span>Log out</span>
-        </div>
       </div>
     </div>
   );

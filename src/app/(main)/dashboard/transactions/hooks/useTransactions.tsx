@@ -1,39 +1,33 @@
 "use client";
-import { useState } from "react";
 import {
   TRANSACTIONS_STATS,
-  TRANSACTIONS_LIST,
-  TRANSACTION_CATEGORIES,
-  TRANSACTION_TYPES,
   TIME_PERIODS,
   TRANSACTION_ACTIONS,
 } from "../utils/constants/transactionsData";
 import { ITransaction } from "../types/transaction";
 import { ITransactionRequest } from "@/interfaces/transactionRequest";
+import { SelectOption } from "@/interfaces/selectOption";
+import useTransactionModal, { IModalState } from "./useTransactionModal";
+import useTransactionDetails, {
+  IDetailsModalState,
+} from "./useTransactionDetails";
+import useTransactionFormData from "./useTransactionFormData";
+import useTransactionList from "./useTransactionList";
+import { ITransactionFilters } from "../utils/constants/filter";
+import useTransactionFilters from "./useTransactionFilters";
+import useMonthlyStats from "./useMonthlyStats";
+import { CURRENT_ITEMS_PER_PAGE } from "../utils/constants/constants";
 
-export interface ITransactionFilters {
-  searchTerm: string;
-  selectedCategory: string;
-  selectedType: string;
-  selectedTimePeriod: string;
-}
-
-export interface IModalState {
-  isOpen: boolean;
-  mode: "add" | "edit";
-  selectedTransaction?: ITransaction;
-}
-
-export interface IDetailsModalState {
-  isOpen: boolean;
-  selectedTransaction?: ITransaction;
-}
+export type { IModalState } from "./useTransactionModal";
+export type { IDetailsModalState } from "./useTransactionDetails";
 
 export interface ITransactionData {
   stats: typeof TRANSACTIONS_STATS;
-  transactions: typeof TRANSACTIONS_LIST;
-  categories: typeof TRANSACTION_CATEGORIES;
-  types: typeof TRANSACTION_TYPES;
+  transactions: ITransaction[];
+  categories: SelectOption[];
+  types: SelectOption[];
+  states: SelectOption[];
+  accounts: SelectOption[];
   timePeriods: typeof TIME_PERIODS;
   actions: typeof TRANSACTION_ACTIONS;
   pagination: {
@@ -69,154 +63,106 @@ export interface IUseTransactions
   modal: IModalState;
   detailsModal: IDetailsModalState;
   closeDetailsModal: () => void;
+  isLoading: boolean;
+  searchInputValue: string;
 }
 
 export default function useTransactions(): IUseTransactions {
-  const [filters, setFilters] = useState<ITransactionFilters>({
-    searchTerm: "",
-    selectedCategory: "all",
-    selectedType: "all",
-    selectedTimePeriod: "30days",
-  });
+  // Use individual hooks for each section
+  const filterHook = useTransactionFilters();
+  const modalHook = useTransactionModal();
+  const detailsHook = useTransactionDetails();
+  const formDataHook = useTransactionFormData();
+  const listHook = useTransactionList(filterHook.filters);
+  const monthlyStats = useMonthlyStats();
 
-  const [modal, setModal] = useState<IModalState>({
-    isOpen: false,
-    mode: "add",
-    selectedTransaction: undefined,
-  });
-
-  const [detailsModal, setDetailsModal] = useState<IDetailsModalState>({
-    isOpen: false,
-    selectedTransaction: undefined,
-  });
-
-  const handleSearch = (term: string) => {
-    console.log(`Search: ${term}`);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleTransactionClick = (_transactionId: number) => {
+    // TODO: Implement transaction click handler
   };
 
-  const handleCategoryFilter = (category: string) => {
-    console.log(`Category filter: ${category}`);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleActionClick = (_actionId: number) => {
+    // TODO: Implement action click handler
   };
 
-  const handleTypeFilter = (type: string) => {
-    console.log(`Type filter: ${type}`);
-  };
-
-  const handleTimePeriodFilter = (period: string) => {
-    console.log(`Time period filter: ${period}`);
-  };
-
-  const handleTransactionClick = (transactionId: number) => {
-    console.log(`Transaction clicked: ${transactionId}`);
-  };
-
-  const handleActionClick = (actionId: number) => {
-    console.log(`Action clicked: ${actionId}`);
-  };
-
-  const clearFilters = () => {
-    console.log("Clear filters");
-  };
-
-  const openAddModal = () => {
-    setModal({
-      isOpen: true,
-      mode: "add",
-      selectedTransaction: undefined,
-    });
-  };
-
-  const openEditModal = (transaction: ITransaction) => {
-    setModal({
-      isOpen: true,
-      mode: "edit",
-      selectedTransaction: transaction,
-    });
-  };
-
-  const closeModal = () => {
-    setModal({
-      isOpen: false,
-      mode: "add",
-      selectedTransaction: undefined,
-    });
-  };
-
-  const handleModalSubmit = (data: ITransactionRequest) => {
-    console.log("Modal submit:", data);
-    closeModal();
-  };
-
-  const handlePageChange = (page: number) => {
-    console.log("Page change:", page);
-    // Aquí iría la lógica para cambiar de página
-  };
-
-  const handleEditTransaction = (transaction: ITransaction) => {
-    console.log("Edit transaction:", transaction);
-    openEditModal(transaction);
-  };
-
-  const handleDeleteTransaction = (transactionId: number) => {
-    console.log("Delete transaction:", transactionId);
-    // Aquí iría la lógica para eliminar la transacción
-  };
-
-  const handleViewDetails = (transaction: ITransaction) => {
-    setDetailsModal({
-      isOpen: true,
-      selectedTransaction: transaction,
-    });
-  };
-
-  const closeDetailsModal = () => {
-    setDetailsModal({
-      isOpen: false,
-      selectedTransaction: undefined,
-    });
-  };
-
-  const handleDownloadReceipt = (transactionId: number) => {
-    console.log("Download receipt:", transactionId);
-    // Aquí iría la lógica para descargar el recibo
+  const formatCurrency = (amount: number): string => {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(amount);
   };
 
   return {
     // Data
-    stats: TRANSACTIONS_STATS,
-    transactions: TRANSACTIONS_LIST,
-    categories: TRANSACTION_CATEGORIES,
-    types: TRANSACTION_TYPES,
+    stats: [
+      {
+        ...TRANSACTIONS_STATS[0],
+        value: formatCurrency(monthlyStats.totalAmount),
+        change: monthlyStats.totalAmountChange || "N/A",
+        changeText: monthlyStats.totalAmountChange
+          ? "from last month"
+          : "no data from last month",
+        positive: monthlyStats.totalAmountChangePositive,
+      },
+      {
+        ...TRANSACTIONS_STATS[1],
+        value: formatCurrency(monthlyStats.totalIncome),
+        change: monthlyStats.totalIncomeChange || "N/A",
+        changeText: monthlyStats.totalIncomeChange
+          ? "from last month"
+          : "no data from last month",
+        positive: monthlyStats.totalIncomeChangePositive,
+      },
+      {
+        ...TRANSACTIONS_STATS[2],
+        value: formatCurrency(monthlyStats.totalExpenses),
+        change: monthlyStats.totalExpensesChange || "N/A",
+        changeText: monthlyStats.totalExpensesChange
+          ? "from last month"
+          : "no data from last month",
+        positive: monthlyStats.totalExpensesChangePositive,
+      },
+    ],
+    transactions: listHook.transactions,
+    categories: filterHook.categories,
+    types: filterHook.types,
+    states: formDataHook.states,
+    accounts: formDataHook.accounts,
     timePeriods: TIME_PERIODS,
     actions: TRANSACTION_ACTIONS,
     pagination: {
-      currentPage: 1,
-      itemsPerPage: 10,
-      totalItems: 1234,
+      currentPage: listHook.currentPage,
+      itemsPerPage: CURRENT_ITEMS_PER_PAGE,
+      totalItems: listHook.totalItems,
     },
 
     // State
-    filters,
-    modal,
-    detailsModal,
+    filters: filterHook.filters,
+    modal: modalHook.modal,
+    detailsModal: detailsHook.detailsModal,
+    isLoading: listHook.isLoading || monthlyStats.isLoading,
+    searchInputValue: filterHook.searchInputValue,
 
     // Actions
-    handleSearch,
-    handleCategoryFilter,
-    handleTypeFilter,
-    handleTimePeriodFilter,
+    handleSearch: filterHook.handleSearch,
+    handleCategoryFilter: filterHook.handleCategoryFilter,
+    handleTypeFilter: filterHook.handleTypeFilter,
+    handleTimePeriodFilter: filterHook.handleTimePeriodFilter,
     handleTransactionClick,
     handleActionClick,
-    clearFilters,
-    openAddModal,
-    openEditModal,
-    closeModal,
-    handleModalSubmit,
-    handlePageChange,
-    handleEditTransaction,
-    handleDeleteTransaction,
-    handleViewDetails,
-    handleDownloadReceipt,
-    closeDetailsModal,
+    clearFilters: filterHook.clearFilters,
+    openAddModal: modalHook.openAddModal,
+    openEditModal: modalHook.openEditModal,
+    closeModal: modalHook.closeModal,
+    handleModalSubmit: () => {},
+    handlePageChange: listHook.handlePageChange,
+    handleEditTransaction: modalHook.handleEditTransaction,
+    handleDeleteTransaction: detailsHook.handleDeleteTransaction,
+    handleViewDetails: detailsHook.handleViewDetails,
+    handleDownloadReceipt: detailsHook.handleDownloadReceipt,
+    closeDetailsModal: detailsHook.closeDetailsModal,
   };
 }

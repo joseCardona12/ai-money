@@ -1,15 +1,15 @@
 "use client";
 import { useState } from "react";
-import {
-  GOALS_DATA,
-  OVERALL_PROGRESS,
-  GOAL_CATEGORIES,
-  GOAL_COLORS,
-} from "../utils/constants/goalsData";
 import { IGoal, IOverallProgress, IGoalOption } from "../types/goals";
 import { IGoalRequest } from "@/interfaces/goalRequest";
 import { IContributionRequest } from "@/interfaces/contributionRequest";
 import { IconEye, IconEdit, IconTrash } from "@tabler/icons-react";
+import { goalService } from "@/services/goals";
+import { toast } from "sonner";
+import useAuthListener from "../../hooks/useAuthListener";
+import useGoalsList from "./useGoalsList";
+import useGoalFormData from "./useGoalFormData";
+import { GOAL_CATEGORIES, GOAL_COLORS } from "../utils/constants/goalsData";
 
 export interface IModalState {
   isOpen: boolean;
@@ -22,6 +22,16 @@ export interface IContributionModalState {
   selectedGoal?: IGoal;
 }
 
+export interface IDetailsModalState {
+  isOpen: boolean;
+  selectedGoal?: IGoal;
+}
+
+export interface IDeleteConfirmationModal {
+  isOpen: boolean;
+  goalId?: number;
+}
+
 export interface IGoalsData {
   goals: IGoal[];
   overallProgress: IOverallProgress;
@@ -29,6 +39,11 @@ export interface IGoalsData {
   goalColors: typeof GOAL_COLORS;
   modal: IModalState;
   contributionModal: IContributionModalState;
+  detailsModal: IDetailsModalState;
+  deleteConfirmationModal: IDeleteConfirmationModal;
+  isLoading: boolean;
+  isSubmitting: boolean;
+  isDeleting: boolean;
 }
 
 export interface IGoalsActions {
@@ -48,12 +63,19 @@ export interface IGoalsActions {
     goalId: number,
     data: IContributionRequest
   ) => void;
+  closeDetailsModal: () => void;
+  closeDeleteConfirmation: () => void;
+  handleConfirmDelete: () => void;
   getGoalOptions: (goal: IGoal) => IGoalOption[];
 }
 
 export interface IUseGoals extends IGoalsData, IGoalsActions {}
 
 export default function useGoals(): IUseGoals {
+  const { user } = useAuthListener();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
   const [modal, setModal] = useState<IModalState>({
     isOpen: false,
     mode: "add",
@@ -66,6 +88,26 @@ export default function useGoals(): IUseGoals {
       selectedGoal: undefined,
     });
 
+  const [detailsModal, setDetailsModal] = useState<IDetailsModalState>({
+    isOpen: false,
+    selectedGoal: undefined,
+  });
+
+  const [deleteConfirmationModal, setDeleteConfirmationModal] =
+    useState<IDeleteConfirmationModal>({
+      isOpen: false,
+      goalId: undefined,
+    });
+
+  // Orchestrate all sub-hooks
+  const listHook = useGoalsList();
+  const formDataHook = useGoalFormData();
+
+  // Callback to refresh goals after deletion
+  const handleGoalsRefresh = () => {
+    listHook.setIsFetching(!listHook.isFetching);
+  };
+
   const handleAddGoal = () => {
     openAddModal();
   };
@@ -75,22 +117,71 @@ export default function useGoals(): IUseGoals {
   };
 
   const handleViewGoalDetails = (goalId: number) => {
-    console.log("View goal details:", goalId);
+    const goal = listHook.goals.find((g: IGoal) => g.id === goalId);
+    if (goal) {
+      openDetailsModal(goal);
+    }
   };
 
   const handleEditGoal = (goalId: number) => {
-    const goal = GOALS_DATA.find((g) => g.id === goalId);
+    const goal = listHook.goals.find((g: IGoal) => g.id === goalId);
     if (goal) {
       openEditModal(goal);
     }
   };
 
   const handleDeleteGoal = (goalId: number) => {
-    console.log("Delete goal:", goalId);
+    setDeleteConfirmationModal({
+      isOpen: true,
+      goalId,
+    });
+  };
+
+  const closeDeleteConfirmation = () => {
+    setDeleteConfirmationModal({
+      isOpen: false,
+      goalId: undefined,
+    });
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!user?.id || !deleteConfirmationModal.goalId) return;
+    try {
+      setIsDeleting(true);
+      const response = await goalService.deleteGoal(
+        user.id,
+        deleteConfirmationModal.goalId
+      );
+
+      // Check if response has error status
+      if (response.status >= 400) {
+        toast.error("Error", {
+          description: response.message || "Failed to delete goal",
+          duration: 2000,
+        });
+        return;
+      }
+
+      toast.success("Success", {
+        description: "Goal deleted successfully",
+        duration: 2000,
+      });
+      closeDetailsModal();
+      closeDeleteConfirmation();
+      handleGoalsRefresh();
+    } catch (error) {
+      console.error("Error deleting goal:", error);
+      toast.error("Error", {
+        description: "Failed to delete goal",
+        duration: 2000,
+      });
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   const handleAddContribution = (goalId: number) => {
-    const goal = GOALS_DATA.find((g) => g.id === goalId);
+    const goal = listHook.goals.find((g: IGoal) => g.id === goalId);
     if (goal) {
       openContributionModal(goal);
     }
@@ -142,10 +233,61 @@ export default function useGoals(): IUseGoals {
     });
   };
 
-  const handleModalSubmit = (data: IGoalRequest) => {
-    console.log("Goal submitted:", data);
-    // Aquí iría la lógica para guardar la meta
-    closeModal();
+  const handleModalSubmit = async (data: IGoalRequest) => {
+    if (!user?.id) return;
+    try {
+      setIsSubmitting(true);
+      if (modal.mode === "add") {
+        // Create new goal
+        const response = await goalService.createGoal(user.id, data);
+
+        // Check if response has error status
+        if (response.status >= 400) {
+          toast.error("Error", {
+            description: response.message || "Failed to create goal",
+            duration: 2000,
+          });
+          return;
+        }
+
+        toast.success("Success", {
+          description: "Goal created successfully",
+          duration: 2000,
+        });
+        handleGoalsRefresh();
+      } else if (modal.mode === "edit" && modal.selectedGoal) {
+        // Update existing goal
+        const response = await goalService.updateGoal(
+          user.id,
+          modal.selectedGoal.id,
+          data
+        );
+
+        // Check if response has error status
+        if (response.status >= 400) {
+          toast.error("Error", {
+            description: response.message || "Failed to update goal",
+            duration: 2000,
+          });
+          return;
+        }
+
+        toast.success("Success", {
+          description: "Goal updated successfully",
+          duration: 2000,
+        });
+        handleGoalsRefresh();
+      }
+      closeModal();
+    } catch (error) {
+      console.error("Error submitting goal:", error);
+      toast.error("Error", {
+        description: "Failed to save goal",
+        duration: 2000,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const openContributionModal = (goal: IGoal) => {
@@ -162,23 +304,85 @@ export default function useGoals(): IUseGoals {
     });
   };
 
-  const handleContributionSubmit = (
+  const openDetailsModal = (goal: IGoal) => {
+    setDetailsModal({
+      isOpen: true,
+      selectedGoal: goal,
+    });
+  };
+
+  const closeDetailsModal = () => {
+    setDetailsModal({
+      isOpen: false,
+      selectedGoal: undefined,
+    });
+  };
+
+  const handleContributionSubmit = async (
     goalId: number,
     data: IContributionRequest
   ) => {
-    console.log("Contribution submitted for goal:", goalId, data);
-    // Aquí iría la lógica para agregar la contribución
-    closeContributionModal();
+    if (!user?.id) return;
+    try {
+      setIsSubmitting(true);
+
+      // Find the goal to get current amount
+      const goal = listHook.goals.find((g) => g.id === goalId);
+      if (!goal) {
+        toast.error("Error", {
+          description: "Goal not found",
+          duration: 2000,
+        });
+        return;
+      }
+
+      // Add contribution to goal
+      const response = await goalService.addContribution(
+        user.id,
+        goalId,
+        goal,
+        data
+      );
+
+      if (response.status >= 400) {
+        toast.error("Error", {
+          description: response.message || "Failed to add contribution",
+          duration: 2000,
+        });
+        return;
+      }
+
+      toast.success("Success", {
+        description: "Contribution added successfully",
+        duration: 2000,
+      });
+
+      // Refresh goals to get updated data
+      handleGoalsRefresh();
+      closeContributionModal();
+    } catch {
+      toast.error("Error", {
+        description: "Failed to add contribution",
+        duration: 2000,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return {
     // Data
-    goals: GOALS_DATA,
-    overallProgress: OVERALL_PROGRESS,
+    goals: listHook.goals,
+    overallProgress: listHook.overallProgress,
     goalCategories: GOAL_CATEGORIES,
-    goalColors: GOAL_COLORS,
+    goalColors: formDataHook.colors,
     modal,
     contributionModal,
+    detailsModal,
+    deleteConfirmationModal,
+    isLoading: listHook.isLoading,
+    isSubmitting,
+    isDeleting,
 
     // Actions
     handleAddGoal,
@@ -194,6 +398,9 @@ export default function useGoals(): IUseGoals {
     openContributionModal,
     closeContributionModal,
     handleContributionSubmit,
+    closeDetailsModal,
+    closeDeleteConfirmation,
+    handleConfirmDelete,
     getGoalOptions,
   };
 }

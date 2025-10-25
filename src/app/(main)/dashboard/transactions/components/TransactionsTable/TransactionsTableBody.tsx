@@ -22,7 +22,7 @@ interface ITransactionsTableBodyProps {
   onEditTransaction?: (transaction: ITransaction) => void;
   onDeleteTransaction?: (transactionId: number) => void;
   onViewDetails?: (transaction: ITransaction) => void;
-  onDownloadReceipt?: (transactionId: number) => void;
+  onDownloadReceipt?: (transaction: ITransaction) => void;
 }
 
 export default function TransactionsTableBody({
@@ -54,7 +54,7 @@ export default function TransactionsTableBody({
       id: "download",
       text: "Download Receipt",
       icon: <IconDownload size={16} />,
-      onClick: () => onDownloadReceipt?.(transaction.id),
+      onClick: () => onDownloadReceipt?.(transaction),
     },
     {
       id: "delete",
@@ -196,4 +196,3 @@ export default function TransactionsTableBody({
     </>
   );
 }
-

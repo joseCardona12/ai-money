@@ -31,8 +31,13 @@ export default function GoalsSection({
     }).format(amount);
   };
 
-  const calculateProgress = (current: number, target: number): number => {
-    return Math.round((current / target) * 100);
+  const calculateProgress = (current: number, target: number): string => {
+    return ((current / target) * 100).toFixed(2);
+  };
+
+  const getProgressPercentageValue = (progressString: string): number => {
+    const value = parseFloat(progressString);
+    return isNaN(value) ? 0 : value;
   };
 
   const getRemainingAmount = (current: number, target: number): number => {
@@ -133,9 +138,8 @@ export default function GoalsSection({
                   <div
                     className="h-2 rounded-full transition-all duration-300"
                     style={{
-                      width: `${calculateProgress(
-                        goal.currentAmount,
-                        goal.targetAmount
+                      width: `${getProgressPercentageValue(
+                        calculateProgress(goal.currentAmount, goal.targetAmount)
                       )}%`,
                       backgroundColor: goal.color,
                     }}

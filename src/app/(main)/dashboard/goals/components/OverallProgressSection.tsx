@@ -17,6 +17,10 @@ export default function OverallProgressSection({
     }).format(amount);
   };
 
+  // Convert percentage string to number, handle NaN
+  const percentageValue = parseFloat(progress.percentage);
+  const safePercentage = isNaN(percentageValue) ? 0 : percentageValue;
+
   return (
     <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
       <div className="flex items-center justify-between mb-3">
@@ -38,7 +42,7 @@ export default function OverallProgressSection({
         <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
           <div
             className="h-full bg-blue-500 rounded-full transition-all duration-300"
-            style={{ width: `${progress.percentage}%` }}
+            style={{ width: `${safePercentage}%` }}
           ></div>
         </div>
       </div>

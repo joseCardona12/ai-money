@@ -6,7 +6,7 @@ import TransactionModal from "./TransactionModal";
 import TransactionDetailsModal from "./TransactionDetailsModal";
 import ConfirmationModal from "@/ui/components/ConfirmationModal";
 import Button from "@/ui/components/Button";
-import { IconPlus, IconDownload } from "@tabler/icons-react";
+import { IconPlus, IconDownload, IconLoader2 } from "@tabler/icons-react";
 import { IUseTransactions } from "../hooks/useTransactions";
 
 interface ITransactionsContentProps {
@@ -32,10 +32,17 @@ export default function TransactionsContent({
           <Button
             variant="outline"
             onClick={() => transactionsData.handleActionClick(2)}
+            disabled={transactionsData.isExporting}
             className="flex items-center space-x-2"
           >
-            <IconDownload size={16} />
-            <span>Export</span>
+            {transactionsData.isExporting ? (
+              <IconLoader2 size={16} className="animate-spin" />
+            ) : (
+              <IconDownload size={16} />
+            )}
+            <span>
+              {transactionsData.isExporting ? "Exporting..." : "Export"}
+            </span>
           </Button>
           <Button
             variant="primary"

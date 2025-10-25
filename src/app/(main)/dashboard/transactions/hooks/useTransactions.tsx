@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import {
   TRANSACTIONS_STATS,
   TIME_PERIODS,
@@ -18,6 +19,8 @@ import useTransactionFilters from "./useTransactionFilters";
 import useMonthlyStats from "./useMonthlyStats";
 import { CURRENT_ITEMS_PER_PAGE } from "../utils/constants/constants";
 import { formatTransactionStats } from "../utils/functions/formatStats";
+import { exportTransactionsToPDF } from "../utils/functions/pdfExport";
+import { toast } from "sonner";
 
 export type { IModalState } from "./useTransactionModal";
 export type { IDetailsModalState } from "./useTransactionDetails";
@@ -54,7 +57,7 @@ export interface ITransactionActions {
   handleEditTransaction: (transaction: ITransaction) => void;
   handleDeleteTransaction: (transactionId: number) => void;
   handleViewDetails: (transaction: ITransaction) => void;
-  handleDownloadReceipt: (transactionId: number) => void;
+  handleDownloadReceipt: (transaction: ITransaction) => void;
 }
 
 export interface IUseTransactions
@@ -73,9 +76,13 @@ export interface IUseTransactions
   setIsFetchTransactions: (isFetching: boolean) => void;
   monthlyStats: ReturnType<typeof useMonthlyStats>;
   isDeletingTransaction: boolean;
+  isExporting: boolean;
 }
 
 export default function useTransactions(): IUseTransactions {
+  // State for export loading
+  const [isExporting, setIsExporting] = useState(false);
+
   // Orchestrate all sub-hooks
   const filterHook = useTransactionFilters();
   const modalHook = useTransactionModal();
@@ -130,8 +137,31 @@ export default function useTransactions(): IUseTransactions {
     handleTransactionClick: () => {
       // TODO: Implement transaction click handler
     },
-    handleActionClick: () => {
-      // TODO: Implement action click handler
+    handleActionClick: async (actionId: number) => {
+      // Action ID 2 is Export
+      if (actionId === 2) {
+        try {
+          setIsExporting(true);
+          await exportTransactionsToPDF(listHook.transactions, {
+            title: "Transaction Report",
+            filename: `transactions-${
+              new Date().toISOString().split("T")[0]
+            }.pdf`,
+          });
+          toast.success("Success", {
+            description: "Transactions exported successfully",
+            duration: 2000,
+          });
+        } catch (error) {
+          console.error("Error exporting transactions:", error);
+          toast.error("Error", {
+            description: "Failed to export transactions",
+            duration: 2000,
+          });
+        } finally {
+          setIsExporting(false);
+        }
+      }
     },
     clearFilters: filterHook.clearFilters,
     openAddModal: modalHook.openAddModal,
@@ -151,5 +181,6 @@ export default function useTransactions(): IUseTransactions {
     handleConfirmDelete: detailsHook.handleConfirmDelete,
     setIsFetchTransactions: listHook.setIsFetching,
     isDeletingTransaction: detailsHook.isDeleting,
+    isExporting,
   };
 }

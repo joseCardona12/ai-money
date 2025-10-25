@@ -4,6 +4,7 @@ import { ITransaction } from "../types/transaction";
 import { transactionService } from "@/services/transaction";
 import useAuthListener from "../../hooks/useAuthListener";
 import { toast } from "sonner";
+import { exportTransactionReceiptToPDF } from "../utils/functions/pdfExport";
 
 interface IDeleteConfirmationModal {
   isOpen: boolean;
@@ -20,7 +21,7 @@ interface IUseTransactionDetailsReturn {
   deleteConfirmationModal: IDeleteConfirmationModal;
   handleViewDetails: (transaction: ITransaction) => void;
   closeDetailsModal: () => void;
-  handleDownloadReceipt: (transactionId: number) => void;
+  handleDownloadReceipt: (transaction: ITransaction) => void;
   handleDeleteTransaction: (transactionId: number) => void;
   handleConfirmDelete: () => void;
   closeDeleteConfirmation: () => void;
@@ -57,8 +58,43 @@ export default function useTransactionDetails(
     });
   };
 
-  const handleDownloadReceipt = (_transactionId: number) => {
-    // TODO: Implement receipt download logic
+  const handleDownloadReceipt = async (transaction: ITransaction) => {
+    try {
+      if (!transaction) {
+        toast.error("Error", {
+          description: "Transaction not found",
+          duration: 2000,
+        });
+        return;
+      }
+
+      // Ensure transaction has required fields
+      if (!transaction.id || !transaction.date || !transaction.time) {
+        toast.error("Error", {
+          description: "Transaction data is incomplete",
+          duration: 2000,
+        });
+        return;
+      }
+
+      await exportTransactionReceiptToPDF(transaction, {
+        title: "Transaction Receipt",
+        filename: `receipt-${transaction.id}-${
+          new Date().toISOString().split("T")[0]
+        }.pdf`,
+      });
+
+      toast.success("Success", {
+        description: "Receipt downloaded successfully",
+        duration: 2000,
+      });
+    } catch (error) {
+      console.error("Error downloading receipt:", error);
+      toast.error("Error", {
+        description: "Failed to download receipt",
+        duration: 2000,
+      });
+    }
   };
 
   const handleDeleteTransaction = (transactionId: number) => {

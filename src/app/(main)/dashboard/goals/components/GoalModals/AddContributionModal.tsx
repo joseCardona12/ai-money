@@ -14,6 +14,7 @@ interface AddContributionModalProps {
   onClose: () => void;
   goal: IGoal | null;
   onSubmit: (goalId: number, data: IContributionRequest) => void;
+  isSubmitting?: boolean;
 }
 
 export default function AddContributionModal({
@@ -21,6 +22,7 @@ export default function AddContributionModal({
   onClose,
   goal,
   onSubmit,
+  isSubmitting = false,
 }: AddContributionModalProps): React.ReactNode {
   const { control, handleSubmit, errors, handleCancel } = useContributionForm({
     onSubmit: (data) => {
@@ -45,11 +47,7 @@ export default function AddContributionModal({
   const remainingAmount = goal.targetAmount - goal.currentAmount;
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      title="Add Contribution"
-    >
+    <Modal isOpen={isOpen} onClose={onClose} title="Add Contribution">
       <div className="p-6">
         <div className="mb-6">
           <div className="flex items-center gap-3 mb-3">
@@ -63,21 +61,20 @@ export default function AddContributionModal({
               <h3 className="font-semibold text-base text-gray-900">
                 {goal.title}
               </h3>
-              <p className="text-sm text-gray-600">
-                {goal.description}
-              </p>
+              <p className="text-sm text-gray-600">{goal.description}</p>
             </div>
           </div>
-          
+
           <div className="bg-gray-50 rounded-lg p-4">
             <div className="flex justify-between items-center mb-2">
               <span className="text-sm text-gray-600">Current Progress</span>
               <span className="text-sm font-medium text-gray-900">
-                {Math.round((goal.currentAmount / goal.targetAmount) * 100)}%
+                {((goal.currentAmount / goal.targetAmount) * 100).toFixed(2)}%
               </span>
             </div>
             <div className="text-lg font-bold text-gray-900 mb-2">
-              {formatCurrency(goal.currentAmount)} / {formatCurrency(goal.targetAmount)}
+              {formatCurrency(goal.currentAmount)} /{" "}
+              {formatCurrency(goal.targetAmount)}
             </div>
             <div className="w-full h-2 bg-gray-200 rounded-full">
               <div
@@ -123,12 +120,33 @@ export default function AddContributionModal({
           />
 
           {/* Action Buttons */}
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-200">
-            <Button variant="outline" onClick={handleCancel}>
+          <div
+            className={`flex items-center justify-end gap-3 pt-4 border-t border-gray-200 ${
+              isSubmitting ? "opacity-50" : ""
+            }`}
+          >
+            <Button
+              variant="outline"
+              onClick={handleCancel}
+              disabled={isSubmitting}
+              className={isSubmitting ? "opacity-50 cursor-not-allowed" : ""}
+            >
               Cancel
             </Button>
-            <Button variant="primary" type="submit">
-              Add Contribution
+            <Button
+              variant="primary"
+              type="submit"
+              disabled={isSubmitting}
+              className={isSubmitting ? "opacity-50 cursor-not-allowed" : ""}
+            >
+              {isSubmitting ? (
+                <span className="flex items-center gap-2">
+                  <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                  Adding...
+                </span>
+              ) : (
+                "Add Contribution"
+              )}
             </Button>
           </div>
         </form>
@@ -136,4 +154,3 @@ export default function AddContributionModal({
     </Modal>
   );
 }
-

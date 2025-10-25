@@ -54,8 +54,8 @@ export const GOALS_DATA: IGoal[] = [
 export const OVERALL_PROGRESS: IOverallProgress = {
   totalCurrent: 39700,
   totalTarget: 78000,
-  percentage: 50.9,
-  description: "You're 50.9% of the way to achieving all your goals",
+  percentage: "50.90",
+  description: "You're 50.90% of the way to achieving all your goals",
 };
 
 export const GOAL_CATEGORIES = [
@@ -75,4 +75,19 @@ export const GOAL_COLORS = [
   { value: "#F59E0B", label: "Orange" },
   { value: "#EF4444", label: "Red" },
   { value: "#6B7280", label: "Gray" },
+];
+
+export const GOAL_ICONS = [
+  { value: "🎯", label: "Target" },
+  { value: "🛡️", label: "Shield" },
+  { value: "✈️", label: "Airplane" },
+  { value: "🚗", label: "Car" },
+  { value: "🏠", label: "House" },
+  { value: "📚", label: "Books" },
+  { value: "💼", label: "Briefcase" },
+  { value: "💰", label: "Money" },
+  { value: "🎓", label: "Graduation" },
+  { value: "🏋️", label: "Fitness" },
+  { value: "🌍", label: "World" },
+  { value: "🎨", label: "Art" },
 ];

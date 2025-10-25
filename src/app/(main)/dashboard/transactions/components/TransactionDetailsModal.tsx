@@ -14,7 +14,7 @@ interface ITransactionDetailsModalProps {
   transaction?: ITransaction;
   onEdit?: (transaction: ITransaction) => void;
   onDelete?: (transactionId: number) => void;
-  onDownloadReceipt?: (transactionId: number) => void;
+  onDownloadReceipt?: (transaction: ITransaction) => void;
 }
 
 export default function TransactionDetailsModal({
@@ -41,7 +41,7 @@ export default function TransactionDetailsModal({
   };
 
   const handleDownload = () => {
-    onDownloadReceipt?.(transaction.id);
+    onDownloadReceipt?.(transaction);
   };
 
   return (

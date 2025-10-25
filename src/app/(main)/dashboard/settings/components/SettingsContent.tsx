@@ -4,12 +4,12 @@ import SettingsTabs from "./SettingsTabs";
 import RegionalSettings from "./RegionalSettings";
 import DataManagement from "./DataManagement";
 import NotificationSettings from "./NotificationSettings";
-import PasswordSettings from "./PasswordSettings";
-import TwoFactorSettings from "./TwoFactorSettings";
-import ActiveSessionsSettings from "./ActiveSessionsSettings";
-import CurrentPlanSettings from "./CurrentPlanSettings";
-import PaymentMethodSettings from "./PaymentMethodSettings";
-import BillingHistorySettings from "./BillingHistorySettings";
+import PasswordSettings from "./SecuritySection/PasswordSettings";
+import TwoFactorSettings from "./SecuritySection/TwoFactorSettings";
+import ActiveSessionsSettings from "./SecuritySection/ActiveSessionsSettings";
+import CurrentPlanSettings from "./BillingSection/CurrentPlanSettings";
+import PaymentMethodSettings from "./BillingSection/PaymentMethodSettings";
+import BillingHistorySettings from "./BillingSection/BillingHistorySettings";
 
 export default function SettingsContent({
   settingsData,

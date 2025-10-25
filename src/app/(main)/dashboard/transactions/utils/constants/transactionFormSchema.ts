@@ -3,7 +3,7 @@ import z from "zod";
 export const transactionFormSchema = z.object({
   type: z.string().min(1, "Type is required"),
   category: z.string().min(1, "Category is required"),
-  amount: z.number().min(0.01, "Amount must be greater than 0"),
+  amount: z.number(),
   date: z.string().min(1, "Date is required"),
   description: z.string().optional(),
   state: z.string().min(1, "State is required"),

@@ -1,10 +1,10 @@
 "use client";
 import { IUseAIAssistant } from "../hooks/useAIAssistant";
-import ChatArea from "./ChatArea";
-import QuickPrompts from "./QuickPrompts";
-import ChatInput from "./ChatInput";
-import AIInsightsPanel from "./AIInsightsPanel";
-import AICapabilities from "./AICapabilities";
+import ChatArea from "./ChatSection/ChatArea";
+import QuickPrompts from "./ChatSection/QuickPrompts";
+import ChatInput from "./ChatSection/ChatInput";
+import AIInsightsPanel from "./InsightsSection/AIInsightsPanel";
+import AICapabilities from "./CapabilitiesSection/AICapabilities";
 
 interface AIAssistantContentProps {
   aiData: IUseAIAssistant;
@@ -22,10 +22,11 @@ export default function AIAssistantContent({
             AI Financial Assistant
           </h1>
           <p className="text-[var(--color-text-gray)] text-sm mt-1">
-            Get personalized insights and manage your finances with voice or text commands
+            Get personalized insights and manage your finances with voice or
+            text commands
           </p>
         </div>
-        
+
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 bg-green-500 rounded-full"></div>
           <span className="text-sm text-green-600 font-medium">AI Active</span>

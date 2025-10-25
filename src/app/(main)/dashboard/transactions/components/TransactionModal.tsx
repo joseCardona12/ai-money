@@ -10,6 +10,7 @@ import { SelectOption } from "@/interfaces/selectOption";
 import { ITransaction } from "../types/transaction";
 import { ITransactionRequest } from "@/interfaces/transactionRequest";
 import useTransactionForm from "../hooks/useTransactionForm";
+import { IconLoader } from "@tabler/icons-react";
 
 interface ITransactionModalProps {
   isOpen: boolean;
@@ -21,6 +22,8 @@ interface ITransactionModalProps {
   types: SelectOption[];
   states: SelectOption[];
   accounts: SelectOption[];
+  isFetchingTransactions: boolean;
+  setIsFetchTransactions: (isFetching: boolean) => void;
 }
 
 export default function TransactionModal({
@@ -28,26 +31,38 @@ export default function TransactionModal({
   onClose,
   mode,
   transaction,
-  onSubmit,
   categories,
   types,
   states,
   accounts,
+  isFetchingTransactions,
+  setIsFetchTransactions,
 }: ITransactionModalProps): React.ReactNode {
   const title = mode === "add" ? "Add Transaction" : "Edit Transaction";
   const submitButtonText = mode === "add" ? "Add Transaction" : "Save Changes";
 
-  const { control, handleSubmit, errors, handleFormSubmit, handleCancel } =
-    useTransactionForm({
-      mode,
-      transaction,
-      onSubmit,
-      onCancel: onClose,
-    });
+  const {
+    control,
+    handleSubmit,
+    errors,
+    handleSubmitTransaction,
+    isSubmitting,
+  } = useTransactionForm({
+    mode,
+    transaction,
+    isFetchingTransactions,
+    setIsFetchTransactions,
+    onClose,
+  });
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={title} size="md">
-      <form onSubmit={handleSubmit(handleFormSubmit)} className="p-6 space-y-6">
+      <form
+        onSubmit={handleSubmit(handleSubmitTransaction)}
+        className={`p-6 space-y-6 transition-opacity duration-200 ${
+          isSubmitting ? "opacity-50 pointer-events-none" : "opacity-100"
+        }`}
+      >
         {/* Subtitle */}
         <p className="text-sm text-[var(--color-text-gray)]">
           {mode === "add"
@@ -75,6 +90,26 @@ export default function TransactionModal({
           options={categories}
         />
 
+        {/* State Field */}
+        <FormFieldSelect<ITransactionRequest>
+          label="State"
+          name="state"
+          control={control}
+          error={errors.state}
+          placeholder="Select state"
+          options={states}
+        />
+
+        {/* Account Field */}
+        <FormFieldSelect<ITransactionRequest>
+          label="Account"
+          name="account"
+          control={control}
+          error={errors.account}
+          placeholder="Select account"
+          options={accounts}
+        />
+
         {/* Amount Field */}
         <FormFieldNumber<ITransactionRequest>
           label="Amount"
@@ -82,7 +117,6 @@ export default function TransactionModal({
           control={control}
           error={errors.amount}
           placeholder="0.00"
-          min={0.01}
         />
 
         {/* Date Field */}
@@ -105,33 +139,24 @@ export default function TransactionModal({
           rows={3}
         />
 
-        {/* State Field */}
-        <FormFieldSelect<ITransactionRequest>
-          label="State"
-          name="state"
-          control={control}
-          error={errors.state}
-          placeholder="Select state"
-          options={states}
-        />
-
-        {/* Account Field */}
-        <FormFieldSelect<ITransactionRequest>
-          label="Account"
-          name="account"
-          control={control}
-          error={errors.account}
-          placeholder="Select account"
-          options={accounts}
-        />
-
         {/* Action Buttons */}
         <div className="flex items-center justify-end space-x-3 pt-4">
-          <Button type="button" variant="ghost" onClick={handleCancel}>
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={onClose}
+            disabled={isSubmitting}
+          >
             Cancel
           </Button>
-          <Button type="submit" variant="primary">
-            {submitButtonText}
+          <Button
+            type="submit"
+            variant="primary"
+            disabled={isSubmitting}
+            className="flex items-center gap-2"
+          >
+            {isSubmitting && <IconLoader size={16} className="animate-spin" />}
+            {isSubmitting ? "Processing..." : submitButtonText}
           </Button>
         </div>
       </form>

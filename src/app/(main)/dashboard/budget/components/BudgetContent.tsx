@@ -2,8 +2,8 @@
 import BudgetStatsSection from "./BudgetStatsSection";
 import BudgetAlertsSection from "./BudgetAlertsSection";
 import BudgetCategoriesSection from "./BudgetCategoriesSection";
-import AddCategoryModal from "./AddCategoryModal";
-import CategoryDetailsModal from "./CategoryDetailsModal";
+import AddCategoryModal from "./CategoryModals/AddCategoryModal";
+import CategoryDetailsModal from "./CategoryModals/CategoryDetailsModal";
 import Button from "@/ui/components/Button";
 import Select from "@/ui/components/Select";
 import { IconPlus } from "@tabler/icons-react";

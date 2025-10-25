@@ -6,7 +6,7 @@ import {
 } from "../utils/constants/filter";
 import { categoryService } from "@/services/category";
 import { SelectOption } from "@/interfaces/selectOption";
-import { convertStatesToSelectOptions } from "../utils/converStatesToSelect";
+import { convertStatesToSelectOptions } from "../utils/functions/convertStatesToSelect";
 import { transactionTypeService } from "@/services/transactionType";
 
 export default function useTransactionFilters() {

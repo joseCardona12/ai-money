@@ -5,7 +5,7 @@ SELECT * FROM accounts;
 SELECT * FROM users;
 SELECT * FROM providers;
 SELECT * FROM roles;
-SELECT * FROM transactions;
+SELECT * FROM transactions;	
 SELECT * FROM transaction_types;
 SELECT * FROM states;
 SELECT * FROM currencies;
@@ -25,8 +25,8 @@ INSERT INTO transactions (
   transaction_type_id, state_id, user_id, account_id, category_id
 ) VALUES
 ('Monthly Salary', 3500.00, '2025-10-01', CURRENT_DATE, 1, 1, 11, 8, 2),
-('Dinner with friends', -45.90, '2025-10-10', CURRENT_DATE, 2, 1, 11, 9, 1),
-('Transfer to Savings Account', -500.00, '2025-10-15', CURRENT_DATE, 2, 1, 11, 8, 3);
+('Dinner with friends', 45.90, '2025-10-10', CURRENT_DATE, 2, 1, 11, 9, 1),
+('Transfer to Savings Account', 500.00, '2025-10-15', CURRENT_DATE, 2, 1, 11, 8, 3);
 
 INSERT INTO accounts (name, account_type_id, balance, created_at, currency_id, user_id) VALUES
 ('Main Checking', 9, 2500.00, CURRENT_DATE, 1, 11),
@@ -134,3 +134,50 @@ INSERT INTO users (fullName,email,password,phone_number,address, bio, profile_pi
 VALUES ('jose cardona','josesimonbarreto.design@gmail.com','testCardona','+573006233410','cr241','Graphic designer', 'http://', '2', 1,1);
 DELETE FROM users WHERE id =3;
 DELETE FROM account_types WHERE id =1;
+
+-- ============================================================================
+-- Script para corregir amounts negativos en la tabla transactions
+-- Ejecutar en MySQL Workbench
+-- ============================================================================
+
+-- 1. Ver los datos actuales antes de corregir
+SELECT 
+    id,
+    description,
+    amount,
+    transaction_type_id,
+    CASE 
+        WHEN transaction_type_id = 1 THEN 'Income'
+        WHEN transaction_type_id = 2 THEN 'Expense'
+        ELSE 'Unknown'
+    END as type,
+    date
+FROM transactions
+WHERE amount < 0
+ORDER BY date DESC;
+
+-- 2. Corregir todos los amounts negativos (convertirlos a positivos)
+UPDATE transactions 
+SET amount = ABS(amount) 
+WHERE amount < 0;
+
+-- 3. Verificar que se corrigieron correctamente
+SELECT 
+    id,
+    description,
+    amount,
+    transaction_type_id,
+    CASE 
+        WHEN transaction_type_id = 1 THEN 'Income'
+        WHEN transaction_type_id = 2 THEN 'Expense'
+        ELSE 'Unknown'
+    END as type,
+    date
+FROM transactions
+ORDER BY date DESC
+LIMIT 20;
+
+-- 4. Verificar que no queden amounts negativos
+SELECT COUNT(*) as negative_amounts_count
+FROM transactions
+WHERE amount < 0;

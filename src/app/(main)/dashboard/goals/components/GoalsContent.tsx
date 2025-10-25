@@ -1,8 +1,8 @@
 "use client";
 import OverallProgressSection from "./OverallProgressSection";
 import GoalsSection from "./GoalsSection";
-import AddGoalModal from "./AddGoalModal";
-import AddContributionModal from "./AddContributionModal";
+import AddGoalModal from "./GoalModals/AddGoalModal";
+import AddContributionModal from "./GoalModals/AddContributionModal";
 import Button from "@/ui/components/Button";
 import { IconPlus } from "@tabler/icons-react";
 import { IUseGoals } from "../hooks/useGoals";

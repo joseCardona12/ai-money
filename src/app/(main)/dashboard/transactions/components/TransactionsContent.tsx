@@ -1,9 +1,10 @@
 "use client";
 import TransactionsStatsCards from "./TransactionsStatsCards";
 import TransactionsFilters from "./TransactionsFilters";
-import TransactionsTable from "./TransactionsTable";
+import TransactionsTable from "./TransactionsTable/TransactionsTable";
 import TransactionModal from "./TransactionModal";
 import TransactionDetailsModal from "./TransactionDetailsModal";
+import ConfirmationModal from "@/ui/components/ConfirmationModal";
 import Button from "@/ui/components/Button";
 import { IconPlus, IconDownload } from "@tabler/icons-react";
 import { IUseTransactions } from "../hooks/useTransactions";
@@ -48,7 +49,10 @@ export default function TransactionsContent({
       </div>
 
       {/* Stats Cards */}
-      <TransactionsStatsCards stats={transactionsData.stats} />
+      <TransactionsStatsCards
+        stats={transactionsData.stats}
+        isLoading={transactionsData.monthlyStats.isLoading}
+      />
 
       {/* Filters */}
       <TransactionsFilters
@@ -92,6 +96,8 @@ export default function TransactionsContent({
         types={transactionsData.types}
         states={transactionsData.states}
         accounts={transactionsData.accounts}
+        setIsFetchTransactions={transactionsData.setIsFetchTransactions}
+        isFetchingTransactions={transactionsData.isFetchingTransactions}
       />
 
       {/* Transaction Details Modal */}
@@ -102,6 +108,19 @@ export default function TransactionsContent({
         onEdit={transactionsData.handleEditTransaction}
         onDelete={transactionsData.handleDeleteTransaction}
         onDownloadReceipt={transactionsData.handleDownloadReceipt}
+      />
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={transactionsData.deleteConfirmationModal.isOpen}
+        onClose={transactionsData.closeDeleteConfirmation}
+        title="Delete Transaction"
+        message="Are you sure you want to delete this transaction? This action cannot be undone."
+        confirmText="Delete"
+        cancelText="Cancel"
+        onConfirm={transactionsData.handleConfirmDelete}
+        isLoading={transactionsData.isDeletingTransaction}
+        variant="danger"
       />
     </div>
   );

@@ -4,8 +4,8 @@ import Button from "@/ui/components/Button";
 import Budget from "@/ui/components/Budget";
 import { ITransaction } from "../types/transaction";
 import { STATUS_COLORS } from "../utils/constants/transactionsData";
-import { formatDate } from "../utils/formatDate";
-import { formatAmount } from "../utils/formatAmount";
+import { formatDate } from "../utils/functions/formatDate";
+import { formatAmount } from "../utils/functions/formatAmount";
 import { IconEdit, IconDownload, IconTrash } from "@tabler/icons-react";
 
 interface ITransactionDetailsModalProps {
@@ -28,13 +28,16 @@ export default function TransactionDetailsModal({
   if (!transaction) return null;
 
   const handleEdit = () => {
-    onEdit?.(transaction);
+    // Close details modal first, then open edit modal
     onClose();
+    // Use setTimeout to ensure the details modal closes before opening edit modal
+    setTimeout(() => {
+      onEdit?.(transaction);
+    }, 100);
   };
 
   const handleDelete = () => {
     onDelete?.(transaction.id);
-    onClose();
   };
 
   const handleDownload = () => {

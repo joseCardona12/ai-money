@@ -7,6 +7,10 @@ import useBudgetForm from "../../hooks/useBudgetForm";
 import { IBudgetCategory } from "../../types/budget";
 import { IBudgetRequest } from "@/interfaces/budgetRequest";
 import { SelectOption } from "@/interfaces/selectOption";
+import {
+  getCurrentMonthISO,
+  getMonthName,
+} from "../../utils/functions/budgetMapper";
 
 interface AddCategoryModalProps {
   isOpen: boolean;
@@ -15,6 +19,8 @@ interface AddCategoryModalProps {
   category?: IBudgetCategory;
   onSubmit: (data: IBudgetRequest) => void;
   availableCategories: SelectOption[];
+  months: SelectOption[];
+  selectedMonth?: string;
 }
 
 export default function AddCategoryModal({
@@ -24,18 +30,22 @@ export default function AddCategoryModal({
   category,
   onSubmit,
   availableCategories,
+  months,
+  selectedMonth,
 }: AddCategoryModalProps): React.ReactNode {
   // Set default values based on mode and category
   const defaultValues =
     mode === "edit" && category
       ? {
-          category: category.name
-            .toLowerCase()
-            .replace(/\s+/g, "-")
-            .replace(/&/g, ""),
-          monthlyBudget: category.budgeted,
+          categoryId: category.id,
+          budgetedAmount: category.budgeted,
+          month: selectedMonth || getCurrentMonthISO(),
         }
-      : undefined;
+      : {
+          categoryId: 0,
+          budgetedAmount: 0,
+          month: selectedMonth || getCurrentMonthISO(),
+        };
 
   const { control, handleSubmit, errors, handleCancel } = useBudgetForm({
     onSubmit,
@@ -56,27 +66,38 @@ export default function AddCategoryModal({
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Month */}
+          <FormFieldSelect<IBudgetRequest>
+            label="Month"
+            name="month"
+            control={control}
+            error={errors.month}
+            placeholder="Select month"
+            options={months}
+          />
+
           {/* Category */}
           <FormFieldSelect<IBudgetRequest>
             label="Category"
-            name="category"
+            name="categoryId"
             control={control}
-            error={errors.category}
+            error={errors.categoryId}
             placeholder="Select category"
             options={availableCategories}
           />
 
-          {/* Monthly Budget */}
+          {/* Budgeted Amount */}
           <FormFieldNumber<IBudgetRequest>
-            label="Monthly Budget"
-            name="monthlyBudget"
+            label="Budgeted Amount"
+            name="budgetedAmount"
             control={control}
-            error={errors.monthlyBudget}
+            error={errors.budgetedAmount}
             placeholder="0.00"
           />
 
           <div className="text-sm text-gray-500 mt-2">
-            Set how much you want to spend in this category per month
+            Set how much you want to budget for this category in the selected
+            month
           </div>
 
           {/* Action Buttons */}
@@ -93,4 +114,3 @@ export default function AddCategoryModal({
     </Modal>
   );
 }
-

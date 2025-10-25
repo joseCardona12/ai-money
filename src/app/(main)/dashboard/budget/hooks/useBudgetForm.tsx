@@ -31,8 +31,9 @@ export default function useBudgetForm({
 
   const handleFormSubmit = (data: BudgetFormData) => {
     const budgetRequest: IBudgetRequest = {
-      category: data.category,
-      monthlyBudget: data.monthlyBudget,
+      categoryId: data.categoryId,
+      budgetedAmount: data.budgetedAmount,
+      month: data.month,
     };
     onSubmit(budgetRequest);
   };

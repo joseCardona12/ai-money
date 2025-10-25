@@ -2,13 +2,19 @@
 import Modal from "@/ui/components/Modal";
 import Button from "@/ui/components/Button";
 import { IBudgetCategory } from "../../types/budget";
-import { IconTrendingUp, IconTrendingDown, IconCalendar, IconTarget } from "@tabler/icons-react";
+import {
+  IconTrendingUp,
+  IconTrendingDown,
+  IconCalendar,
+  IconTarget,
+} from "@tabler/icons-react";
 
 interface CategoryDetailsModalProps {
   isOpen: boolean;
   onClose: () => void;
   category: IBudgetCategory | null;
   onEdit: () => void;
+  onDelete?: (budgetId: number) => void;
 }
 
 export default function CategoryDetailsModal({
@@ -16,6 +22,7 @@ export default function CategoryDetailsModal({
   onClose,
   category,
   onEdit,
+  onDelete,
 }: CategoryDetailsModalProps): React.ReactNode {
   if (!isOpen || !category) return null;
 
@@ -40,12 +47,7 @@ export default function CategoryDetailsModal({
   const projectedSpending = (category.spent / 15) * 30; // Projected based on current pace
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      title="Category Details"
-      size="lg"
-    >
+    <Modal isOpen={isOpen} onClose={onClose} title="Category Details" size="lg">
       <div className="p-6">
         {/* Category Header */}
         <div className="flex items-center gap-4 mb-6">
@@ -56,7 +58,9 @@ export default function CategoryDetailsModal({
             {category.icon}
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">{category.name}</h2>
+            <h2 className="text-2xl font-bold text-gray-900">
+              {category.name}
+            </h2>
             <p className="text-gray-600">January 2024 Budget</p>
           </div>
         </div>
@@ -72,9 +76,11 @@ export default function CategoryDetailsModal({
             </div>
             <div>
               <p className="text-sm text-gray-600 mb-1">Amount Spent</p>
-              <p className={`text-2xl font-bold ${
-                isOverBudget ? "text-red-600" : "text-gray-900"
-              }`}>
+              <p
+                className={`text-2xl font-bold ${
+                  isOverBudget ? "text-red-600" : "text-gray-900"
+                }`}
+              >
                 {formatCurrency(category.spent)}
               </p>
             </div>
@@ -84,9 +90,11 @@ export default function CategoryDetailsModal({
           <div className="mb-4">
             <div className="flex justify-between items-center mb-2">
               <span className="text-sm text-gray-600">Progress</span>
-              <span className={`text-sm font-medium ${
-                isOverBudget ? "text-red-600" : "text-gray-900"
-              }`}>
+              <span
+                className={`text-sm font-medium ${
+                  isOverBudget ? "text-red-600" : "text-gray-900"
+                }`}
+              >
                 {progressPercentage.toFixed(1)}%
               </span>
             </div>
@@ -129,11 +137,14 @@ export default function CategoryDetailsModal({
           <div className="bg-white border border-gray-200 rounded-lg p-4">
             <div className="flex items-center gap-2 mb-2">
               <IconTrendingUp size={16} className="text-blue-500" />
-              <span className="text-sm font-medium text-gray-700">Monthly Trend</span>
+              <span className="text-sm font-medium text-gray-700">
+                Monthly Trend
+              </span>
             </div>
             <div className="flex items-center gap-1">
               <span className="text-lg font-bold text-gray-900">
-                {monthlyTrend > 0 ? '+' : ''}{monthlyTrend}%
+                {monthlyTrend > 0 ? "+" : ""}
+                {monthlyTrend}%
               </span>
               <span className="text-sm text-gray-500">vs last month</span>
             </div>
@@ -143,7 +154,9 @@ export default function CategoryDetailsModal({
           <div className="bg-white border border-gray-200 rounded-lg p-4">
             <div className="flex items-center gap-2 mb-2">
               <IconCalendar size={16} className="text-green-500" />
-              <span className="text-sm font-medium text-gray-700">Daily Average</span>
+              <span className="text-sm font-medium text-gray-700">
+                Daily Average
+              </span>
             </div>
             <div className="text-lg font-bold text-gray-900">
               {formatCurrency(averageDaily)}
@@ -154,7 +167,9 @@ export default function CategoryDetailsModal({
           <div className="bg-white border border-gray-200 rounded-lg p-4">
             <div className="flex items-center gap-2 mb-2">
               <IconCalendar size={16} className="text-orange-500" />
-              <span className="text-sm font-medium text-gray-700">Days Remaining</span>
+              <span className="text-sm font-medium text-gray-700">
+                Days Remaining
+              </span>
             </div>
             <div className="text-lg font-bold text-gray-900">
               {daysRemaining} days
@@ -165,11 +180,17 @@ export default function CategoryDetailsModal({
           <div className="bg-white border border-gray-200 rounded-lg p-4">
             <div className="flex items-center gap-2 mb-2">
               <IconTarget size={16} className="text-purple-500" />
-              <span className="text-sm font-medium text-gray-700">Projected Total</span>
+              <span className="text-sm font-medium text-gray-700">
+                Projected Total
+              </span>
             </div>
-            <div className={`text-lg font-bold ${
-              projectedSpending > category.budgeted ? "text-red-600" : "text-gray-900"
-            }`}>
+            <div
+              className={`text-lg font-bold ${
+                projectedSpending > category.budgeted
+                  ? "text-red-600"
+                  : "text-gray-900"
+              }`}
+            >
               {formatCurrency(projectedSpending)}
             </div>
           </div>
@@ -177,38 +198,59 @@ export default function CategoryDetailsModal({
 
         {/* Spending Insights */}
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-          <h3 className="font-semibold text-blue-900 mb-2">💡 Spending Insights</h3>
+          <h3 className="font-semibold text-blue-900 mb-2">
+            💡 Spending Insights
+          </h3>
           <div className="space-y-2 text-sm text-blue-800">
             {isOverBudget ? (
               <>
-                <p>• You've exceeded your budget for this category by {formatCurrency(overAmount)}</p>
-                <p>• Consider reducing spending or adjusting your budget for next month</p>
+                <p>
+                  • You've exceeded your budget for this category by{" "}
+                  {formatCurrency(overAmount)}
+                </p>
+                <p>
+                  • Consider reducing spending or adjusting your budget for next
+                  month
+                </p>
               </>
             ) : projectedSpending > category.budgeted ? (
               <>
-                <p>• At your current pace, you may exceed your budget by month-end</p>
+                <p>
+                  • At your current pace, you may exceed your budget by
+                  month-end
+                </p>
                 <p>• Consider slowing down spending to stay within budget</p>
               </>
             ) : (
               <>
                 <p>• You're on track to stay within your budget this month</p>
-                <p>• You have {formatCurrency(remainingAmount)} left to spend</p>
+                <p>
+                  • You have {formatCurrency(remainingAmount)} left to spend
+                </p>
               </>
             )}
           </div>
         </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-200">
-          <Button variant="outline" onClick={onClose}>
-            Close
+        <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+          <Button
+            variant="outline"
+            onClick={() => onDelete?.(category.id)}
+            className="text-red-600 border-red-200 hover:bg-red-50"
+          >
+            Delete
           </Button>
-          <Button variant="primary" onClick={onEdit}>
-            Edit Category
-          </Button>
+          <div className="flex items-center gap-3">
+            <Button variant="outline" onClick={onClose}>
+              Close
+            </Button>
+            <Button variant="primary" onClick={onEdit}>
+              Edit Category
+            </Button>
+          </div>
         </div>
       </div>
     </Modal>
   );
 }
-

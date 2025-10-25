@@ -1,4 +1,8 @@
-import { IBudgetCategory, IBudgetSummary, IBudgetAlert } from "../../types/budget";
+import {
+  IBudgetCategory,
+  IBudgetSummary,
+  IBudgetAlert,
+} from "../../types/budget";
 import { SelectOption } from "@/interfaces/selectOption";
 
 export const BUDGET_CATEGORIES: IBudgetCategory[] = [
@@ -112,17 +116,36 @@ export const AVAILABLE_CATEGORIES: SelectOption[] = [
   { value: "other", label: "Other" },
 ];
 
-export const MONTHS: SelectOption[] = [
-  { value: "january", label: "January" },
-  { value: "february", label: "February" },
-  { value: "march", label: "March" },
-  { value: "april", label: "April" },
-  { value: "may", label: "May" },
-  { value: "june", label: "June" },
-  { value: "july", label: "July" },
-  { value: "august", label: "August" },
-  { value: "september", label: "September" },
-  { value: "october", label: "October" },
-  { value: "november", label: "November" },
-  { value: "december", label: "December" },
-];
+/**
+ * Generate months for current year in ISO format (YYYY-MM-DD)
+ * Each month starts on the 1st day
+ */
+export const generateMonthsForYear = (
+  year: number = new Date().getFullYear()
+): SelectOption[] => {
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  return months.map((month, index) => {
+    const monthNum = String(index + 1).padStart(2, "0");
+    const isoDate = `${year}-${monthNum}-01`;
+    return {
+      value: isoDate,
+      label: `${month} ${year}`,
+    };
+  });
+};
+
+export const MONTHS: SelectOption[] = generateMonthsForYear();

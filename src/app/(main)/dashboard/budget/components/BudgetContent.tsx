@@ -4,6 +4,7 @@ import BudgetAlertsSection from "./BudgetAlertsSection";
 import BudgetCategoriesSection from "./BudgetCategoriesSection";
 import AddCategoryModal from "./CategoryModals/AddCategoryModal";
 import CategoryDetailsModal from "./CategoryModals/CategoryDetailsModal";
+import ConfirmationModal from "@/ui/components/ConfirmationModal";
 import Button from "@/ui/components/Button";
 import Select from "@/ui/components/Select";
 import { IconPlus } from "@tabler/icons-react";
@@ -69,6 +70,8 @@ export default function BudgetContent({
         category={budgetData.modal.selectedCategory}
         onSubmit={budgetData.handleModalSubmit}
         availableCategories={budgetData.availableCategories}
+        months={budgetData.months}
+        selectedMonth={budgetData.selectedMonth}
       />
 
       {/* Category Details Modal */}
@@ -77,6 +80,23 @@ export default function BudgetContent({
         onClose={budgetData.closeDetailsModal}
         category={budgetData.detailsModal.selectedCategory || null}
         onEdit={budgetData.handleEditFromDetails}
+        onDelete={(budgetId) => {
+          budgetData.closeDetailsModal();
+          budgetData.handleDeleteCategory(budgetId);
+        }}
+      />
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={budgetData.deleteConfirmationModal.isOpen}
+        onClose={budgetData.closeDeleteConfirmation}
+        title="Delete Budget"
+        message="Are you sure you want to delete this budget? This action cannot be undone."
+        confirmText="Delete"
+        cancelText="Cancel"
+        onConfirm={budgetData.handleConfirmDelete}
+        isLoading={budgetData.isDeleting}
+        variant="danger"
       />
     </div>
   );

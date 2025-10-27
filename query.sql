@@ -1,4 +1,4 @@
-USE ai_money_db;
+USE ai_money_db;ss
 
 SELECT  * FROM account_types;
 SELECT * FROM accounts;

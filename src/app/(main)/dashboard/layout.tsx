@@ -1,5 +1,4 @@
 import DashboardLayout from "./components/DashboardLayout";
-import PrivateRoute from "@/components/auth/PrivateRoute";
 
 interface DashboardLayoutPageProps {
   children: React.ReactNode;
@@ -8,9 +7,5 @@ interface DashboardLayoutPageProps {
 export default function DashboardLayoutPage({
   children,
 }: DashboardLayoutPageProps) {
-  return (
-    <PrivateRoute>
-      <DashboardLayout>{children}</DashboardLayout>
-    </PrivateRoute>
-  );
+  return <DashboardLayout>{children}</DashboardLayout>;
 }

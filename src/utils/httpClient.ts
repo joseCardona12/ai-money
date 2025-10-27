@@ -1,100 +1,80 @@
 import { tokenRefreshService } from "@/services/tokenRefresh";
 
 export class HTTPClient {
-  private protocol: string = "http";
-  private host: string = "localhost";
-  private port: string = "3001";
-  private baseUrl: string = `${this.protocol}://${this.host}:${this.port}/api`;
+  private baseUrl: string = "http://localhost:3001/api";
+  private isRefreshing: boolean = false;
+  private refreshPromise: Promise<void> | null = null;
 
-  constructor(
-    protocolClient?: string,
-    hostClient?: string,
-    portClient?: string,
-    urlClient?: string
-  ) {
-    this.protocol = protocolClient || this.protocol;
-    this.host = hostClient || this.host;
-    this.baseUrl = urlClient || this.baseUrl;
-    this.port = portClient || this.port;
+  constructor(clientBaseUrl?: string) {
+    this.baseUrl = clientBaseUrl ?? this.baseUrl;
   }
 
-  private getHeaders(
-    headers: Record<string, string> = {}
-  ): Record<string, string> {
-    const baseHeaders: Record<string, string> = {
-      "Content-Type": "application/json",
-      ...headers,
+  private getHeaders(token?: string | null) {
+    const headers: Record<string, string> = {
+      "Content-type": "application/json",
     };
-
-    // Intentar obtener el token de autenticación
-    try {
-      const token =
-        localStorage.getItem("authToken") ||
-        sessionStorage.getItem("authToken");
-      if (token) {
-        baseHeaders.Authorization = `Bearer ${token}`;
-      }
-    } catch (error) {
-      // Ignorar errores de localStorage/sessionStorage en caso de que no estén disponibles
-      console.warn("Could not access storage for auth token:", error);
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
     }
-
-    return baseHeaders;
+    return headers;
   }
 
-  private async managementError<T>(response: Response): Promise<T> {
-    const responseData = await response.json();
+  /**
+   * Check if token is expired and refresh if needed
+   */
+  private async ensureValidToken(): Promise<void> {
+    const token = localStorage.getItem("token");
 
-    if (!response.ok) {
-      // Si el backend devuelve un error estructurado, lo retornamos tal como está
-      if (responseData.message && responseData.status) {
-        return responseData as T;
-      }
-
-      // Si no, creamos una estructura de error estándar
-      return {
-        message: "Opss. There is an Error with response",
-        status: response.status,
-        code: "HTTP_ERROR",
-      } as T;
+    if (!token) {
+      return;
     }
 
-    return responseData as T;
+    // If token is expired, refresh it
+    if (tokenRefreshService.isTokenExpired(token)) {
+      // If already refreshing, wait for it to complete
+      if (this.isRefreshing && this.refreshPromise) {
+        return this.refreshPromise;
+      }
+
+      this.isRefreshing = true;
+      this.refreshPromise = tokenRefreshService
+        .refreshToken()
+        .then(() => {
+          this.isRefreshing = false;
+          this.refreshPromise = null;
+        })
+        .catch(() => {
+          this.isRefreshing = false;
+          this.refreshPromise = null;
+        });
+
+      return this.refreshPromise;
+    }
   }
 
-  public async get<T>(path: string): Promise<T> {
-    const headers: Record<string, string> = this.getHeaders();
-    console.log(`${this.baseUrl}/${path}`);
-    const response = await fetch(`${this.baseUrl}/${path}`, {
+  async get<T>(url: string): Promise<T> {
+    await this.ensureValidToken();
+
+    const token = localStorage.getItem("token");
+    const headers = this.getHeaders(token);
+    const response = await fetch(`${this.baseUrl}/${url}`, {
       headers,
       method: "GET",
     });
-    return await this.managementError(response);
+    return await response.json();
   }
 
-  public async post<T, B>(path: string, body: B): Promise<T> {
-    console.log("data-------", path, body);
-    const headers: Record<string, string> = this.getHeaders();
-    console.log("headers", `${this.baseUrl}/${path}`);
-    const response = await fetch(`${this.baseUrl}/${path}`, {
+  async post<B, T>(url: string, body: B): Promise<T> {
+    await this.ensureValidToken();
+
+    const token = localStorage.getItem("token");
+    const headers = this.getHeaders(token);
+    const response = await fetch(`${this.baseUrl}/${url}`, {
       headers,
       method: "POST",
       body: JSON.stringify(body),
     });
-    console.log("response", response);
-    return await this.managementError(response);
-  }
-
-  public async delete<T>(path: string): Promise<T> {
-    console.log("data-------", path);
-    const headers: Record<string, string> = this.getHeaders();
-    console.log("headers", `${this.baseUrl}/${path}`);
-    const response = await fetch(`${this.baseUrl}/${path}`, {
-      headers,
-      method: "DELETE",
-    });
-    console.log("response", response);
-    return await this.managementError(response);
+    return await response.json();
   }
 
   async put<B, T>(url: string, body: B): Promise<T> {

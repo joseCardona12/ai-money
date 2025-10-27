@@ -2,13 +2,12 @@ import Button from "@/ui/components/Button";
 import { IconArrowRight, IconSpinner } from "../../../../../public/icons";
 import Link from "next/link";
 
-interface IFormSignUpFooterProps {
-  loading?: boolean;
+interface IFormSignUpHeaderProps {
+  loading: boolean;
 }
-
 export default function FormSignUpFooter({
-  loading = false,
-}: IFormSignUpFooterProps): React.ReactNode {
+  loading,
+}: IFormSignUpHeaderProps): React.ReactNode {
   return (
     <div className="w-full flex flex-col gap-2">
       <Button
@@ -17,16 +16,14 @@ export default function FormSignUpFooter({
         disabled={loading}
       >
         {loading ? (
-          <>
-            Creating account...
-            <IconSpinner className="w-4 h-4 animate-spin" />
-          </>
+          <div className="flex items-center gap-2 justify-center">
+            <IconSpinner className="animate-spin duration-150" />
+            <span>Loading...</span>
+          </div>
         ) : (
-          <>
-            Create account
-            <IconArrowRight />
-          </>
+          "Create account"
         )}
+        <IconArrowRight />
       </Button>
       <p className="text-sm text-[var(--color-text-gray)] text-center">
         Do you have an account?{" "}

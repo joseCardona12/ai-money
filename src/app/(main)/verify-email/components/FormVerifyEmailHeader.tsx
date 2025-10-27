@@ -2,9 +2,9 @@ export default function FormVerifyEmailHeader(): React.ReactNode {
   return (
     <div>
       <div>
-        <h1 className="text-[1.8rem] font-bold">Verify your email</h1>
+        <h1 className="text-[1.8rem] font-bold">Reset your password</h1>
         <p className="text-[var(--color-text-gray)] text-sm">
-          We've sent a 6-digit code to <strong>name@gmail.com</strong>
+          Enter your new password below to complete the reset process
         </p>
       </div>
     </div>

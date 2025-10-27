@@ -3,6 +3,7 @@ import useSignUp from "../hooks/useSignUp";
 import FormSignUpBody from "./FormSignUpBody";
 import FormSignUpFooter from "./FormSignUpFooter";
 import FormSignUpHeader from "./FormSignUpHeader";
+import SignUpStatusModal from "./SignUpStatusModal";
 
 export default function FormSignUp(): React.ReactNode {
   const {
@@ -12,19 +13,33 @@ export default function FormSignUp(): React.ReactNode {
     handleSignUp,
     remember,
     setRemember,
+    modal,
+    handleTryAgain,
     loading,
   } = useSignUp();
+
   return (
-    <form onSubmit={handleSubmit(handleSignUp)} className="flex flex-col gap-6">
-      <FormSignUpHeader loading={loading} />
-      <FormSignUpBody
-        control={control}
-        errors={errors}
-        setRemember={setRemember}
-        remember={remember}
-        loading={loading}
+    <>
+      <form
+        onSubmit={handleSubmit(handleSignUp)}
+        className="flex flex-col gap-6"
+      >
+        <FormSignUpHeader />
+        <FormSignUpBody
+          control={control}
+          errors={errors}
+          setRemember={setRemember}
+          remember={remember}
+        />
+        <FormSignUpFooter loading={loading} />
+      </form>
+
+      <SignUpStatusModal
+        status={modal.status}
+        message={modal.message}
+        isOpen={modal.isOpen}
+        onClose={handleTryAgain}
       />
-      <FormSignUpFooter loading={loading} />
-    </form>
+    </>
   );
 }

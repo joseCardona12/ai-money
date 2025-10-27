@@ -20,7 +20,7 @@ export default function FormForgotPasswordRight(): React.ReactNode {
           We'll help you reset your password and get back to managing your
           finances in no time
         </p>
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-4">
           {CURRENT_FORGOT_PASSWORD_ITEMS.map(
             (item: IForgotPasswordItem, index: number) => (
               <ItemFinancialJourney

@@ -5,21 +5,15 @@ import { IconArrowLeft } from "../../../../../public/icons";
 export default function FormVerifyEmailFooter(): React.ReactNode {
   return (
     <div className="flex flex-col gap-6">
-      <Button variant="primary" className="w-full">
-        Verify email
+      <Button variant="primary" className="w-full" type="submit">
+        Reset password
       </Button>
-      <div className="flex flex-col ">
-        <p className="text-center text-sm">Didn't receive the code?</p>
-        <div className="flex flex-col gap-4">
-          <Button variant="outline" type="button">
-            Resend code
-          </Button>
-          <div className="flex items-center gap-2">
-            <IconArrowLeft className="text-sm text-[var(--color-text-gray)]" />
-            <Link href="/" className="text-sm text-[var(--color-text-gray)]">
-              Use a different email
-            </Link>
-          </div>
+      <div className="flex flex-col">
+        <div className="flex items-center justify-center gap-2">
+          <IconArrowLeft className="text-sm text-[var(--color-text-gray)]" />
+          <Link href="/login" className="text-sm text-[var(--color-text-gray)]">
+            Back to login
+          </Link>
         </div>
       </div>
     </div>

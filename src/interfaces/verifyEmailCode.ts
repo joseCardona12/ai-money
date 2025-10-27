@@ -6,3 +6,8 @@ export interface IVerifyEmailRequest {
   codeFive: string;
   codeSix: string;
 }
+
+export interface IResetPasswordRequest {
+  newPassword: string;
+  confirmPassword: string;
+}

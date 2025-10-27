@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import {
   TRANSACTIONS_STATS,
   TIME_PERIODS,
@@ -17,6 +18,9 @@ import { ITransactionFilters } from "../utils/constants/filter";
 import useTransactionFilters from "./useTransactionFilters";
 import useMonthlyStats from "./useMonthlyStats";
 import { CURRENT_ITEMS_PER_PAGE } from "../utils/constants/constants";
+import { formatTransactionStats } from "../utils/functions/formatStats";
+import { exportTransactionsToPDF } from "../utils/functions/pdfExport";
+import { toast } from "sonner";
 
 export type { IModalState } from "./useTransactionModal";
 export type { IDetailsModalState } from "./useTransactionDetails";
@@ -53,7 +57,7 @@ export interface ITransactionActions {
   handleEditTransaction: (transaction: ITransaction) => void;
   handleDeleteTransaction: (transactionId: number) => void;
   handleViewDetails: (transaction: ITransaction) => void;
-  handleDownloadReceipt: (transactionId: number) => void;
+  handleDownloadReceipt: (transaction: ITransaction) => void;
 }
 
 export interface IUseTransactions
@@ -63,69 +67,46 @@ export interface IUseTransactions
   modal: IModalState;
   detailsModal: IDetailsModalState;
   closeDetailsModal: () => void;
+  deleteConfirmationModal: { isOpen: boolean; transactionId?: number };
+  closeDeleteConfirmation: () => void;
+  handleConfirmDelete: () => void;
   isLoading: boolean;
   searchInputValue: string;
+  isFetchingTransactions: boolean;
+  setIsFetchTransactions: (isFetching: boolean) => void;
+  monthlyStats: ReturnType<typeof useMonthlyStats>;
+  isDeletingTransaction: boolean;
+  isExporting: boolean;
 }
 
 export default function useTransactions(): IUseTransactions {
-  // Use individual hooks for each section
+  // State for export loading
+  const [isExporting, setIsExporting] = useState(false);
+
+  // Orchestrate all sub-hooks
   const filterHook = useTransactionFilters();
   const modalHook = useTransactionModal();
-  const detailsHook = useTransactionDetails();
   const formDataHook = useTransactionFormData();
   const listHook = useTransactionList(filterHook.filters);
-  const monthlyStats = useMonthlyStats();
+  // Pass isFetching as refreshTrigger to update stats when transactions are fetched
+  const monthlyStats = useMonthlyStats({ refreshTrigger: listHook.isFetching });
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleTransactionClick = (_transactionId: number) => {
-    // TODO: Implement transaction click handler
+  // Callback to refresh transactions after deletion
+  const handleTransactionDeleted = () => {
+    listHook.setIsFetching(!listHook.isFetching);
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleActionClick = (_actionId: number) => {
-    // TODO: Implement action click handler
-  };
+  const detailsHook = useTransactionDetails(handleTransactionDeleted);
 
-  const formatCurrency = (amount: number): string => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(amount);
-  };
+  // Format stats with monthly data
+  const formattedStats = formatTransactionStats(
+    TRANSACTIONS_STATS,
+    monthlyStats
+  );
 
   return {
     // Data
-    stats: [
-      {
-        ...TRANSACTIONS_STATS[0],
-        value: formatCurrency(monthlyStats.totalAmount),
-        change: monthlyStats.totalAmountChange || "N/A",
-        changeText: monthlyStats.totalAmountChange
-          ? "from last month"
-          : "no data from last month",
-        positive: monthlyStats.totalAmountChangePositive,
-      },
-      {
-        ...TRANSACTIONS_STATS[1],
-        value: formatCurrency(monthlyStats.totalIncome),
-        change: monthlyStats.totalIncomeChange || "N/A",
-        changeText: monthlyStats.totalIncomeChange
-          ? "from last month"
-          : "no data from last month",
-        positive: monthlyStats.totalIncomeChangePositive,
-      },
-      {
-        ...TRANSACTIONS_STATS[2],
-        value: formatCurrency(monthlyStats.totalExpenses),
-        change: monthlyStats.totalExpensesChange || "N/A",
-        changeText: monthlyStats.totalExpensesChange
-          ? "from last month"
-          : "no data from last month",
-        positive: monthlyStats.totalExpensesChangePositive,
-      },
-    ],
+    stats: formattedStats,
     transactions: listHook.transactions,
     categories: filterHook.categories,
     types: filterHook.types,
@@ -138,6 +119,7 @@ export default function useTransactions(): IUseTransactions {
       itemsPerPage: CURRENT_ITEMS_PER_PAGE,
       totalItems: listHook.totalItems,
     },
+    isFetchingTransactions: listHook.isFetching,
 
     // State
     filters: filterHook.filters,
@@ -145,24 +127,60 @@ export default function useTransactions(): IUseTransactions {
     detailsModal: detailsHook.detailsModal,
     isLoading: listHook.isLoading || monthlyStats.isLoading,
     searchInputValue: filterHook.searchInputValue,
+    monthlyStats,
 
     // Actions
     handleSearch: filterHook.handleSearch,
     handleCategoryFilter: filterHook.handleCategoryFilter,
     handleTypeFilter: filterHook.handleTypeFilter,
     handleTimePeriodFilter: filterHook.handleTimePeriodFilter,
-    handleTransactionClick,
-    handleActionClick,
+    handleTransactionClick: () => {
+      // TODO: Implement transaction click handler
+    },
+    handleActionClick: async (actionId: number) => {
+      // Action ID 2 is Export
+      if (actionId === 2) {
+        try {
+          setIsExporting(true);
+          await exportTransactionsToPDF(listHook.transactions, {
+            title: "Transaction Report",
+            filename: `transactions-${
+              new Date().toISOString().split("T")[0]
+            }.pdf`,
+          });
+          toast.success("Success", {
+            description: "Transactions exported successfully",
+            duration: 2000,
+          });
+        } catch (error) {
+          console.error("Error exporting transactions:", error);
+          toast.error("Error", {
+            description: "Failed to export transactions",
+            duration: 2000,
+          });
+        } finally {
+          setIsExporting(false);
+        }
+      }
+    },
     clearFilters: filterHook.clearFilters,
     openAddModal: modalHook.openAddModal,
     openEditModal: modalHook.openEditModal,
     closeModal: modalHook.closeModal,
-    handleModalSubmit: () => {},
+    handleModalSubmit: (data: ITransactionRequest) => {
+      console.log("data", data);
+    },
     handlePageChange: listHook.handlePageChange,
     handleEditTransaction: modalHook.handleEditTransaction,
     handleDeleteTransaction: detailsHook.handleDeleteTransaction,
     handleViewDetails: detailsHook.handleViewDetails,
     handleDownloadReceipt: detailsHook.handleDownloadReceipt,
     closeDetailsModal: detailsHook.closeDetailsModal,
+    deleteConfirmationModal: detailsHook.deleteConfirmationModal,
+    closeDeleteConfirmation: detailsHook.closeDeleteConfirmation,
+    handleConfirmDelete: detailsHook.handleConfirmDelete,
+    setIsFetchTransactions: listHook.setIsFetching,
+    isDeletingTransaction: detailsHook.isDeleting,
+    isExporting,
   };
 }

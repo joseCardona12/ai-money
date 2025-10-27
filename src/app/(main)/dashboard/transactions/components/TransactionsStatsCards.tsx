@@ -1,5 +1,6 @@
 "use client";
 import { IconTrendingUp, IconTrendingDown } from "@tabler/icons-react";
+import TransactionsStatsCardsSkeleton from "./TransactionsStatsCardsSkeleton";
 
 interface ITransactionStat {
   title: string;
@@ -11,11 +12,17 @@ interface ITransactionStat {
 
 interface ITransactionsStatsCardsProps {
   stats: ITransactionStat[];
+  isLoading?: boolean;
 }
 
 export default function TransactionsStatsCards({
   stats,
+  isLoading = false,
 }: ITransactionsStatsCardsProps): React.ReactNode {
+  // Show skeleton while loading
+  if (isLoading) {
+    return <TransactionsStatsCardsSkeleton />;
+  }
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       {stats.map((stat, index) => (
@@ -47,7 +54,7 @@ export default function TransactionsStatsCards({
               )}
             </div>
           </div>
-          
+
           <div className="space-y-2">
             <p className="text-2xl font-semibold text-[var(--color-text-black)]">
               {stat.value}

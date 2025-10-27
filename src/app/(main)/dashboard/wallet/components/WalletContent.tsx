@@ -2,7 +2,7 @@
 import WalletStatsCard from "./WalletStatsCard";
 import AccountsSection from "./AccountsSection";
 import RecentActivitySection from "./RecentActivitySection";
-import AddAccountModal from "./AddAccountModal";
+import AddAccountModal from "./AccountModals/AddAccountModal";
 import Button from "@/ui/components/Button";
 import { IconPlus } from "@tabler/icons-react";
 import { IUseWallet } from "../hooks/useWallet";

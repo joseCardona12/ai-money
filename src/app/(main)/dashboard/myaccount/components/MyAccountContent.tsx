@@ -1,11 +1,11 @@
 "use client";
 import { IMyAccountContentProps } from "../types/myaccount";
 import TitleContent from "@/ui/components/TitleContent";
-import ProfilePicture from "./ProfilePicture";
-import PersonalInformation from "./PersonalInformation";
-import AccountStatistics from "./AccountStatistics";
-import RecentActivity from "./RecentActivity";
-import ConnectedAccounts from "./ConnectedAccounts";
+import ProfilePicture from "./ProfileSection/ProfilePicture";
+import PersonalInformation from "./ProfileSection/PersonalInformation";
+import AccountStatistics from "./ActivitySection/AccountStatistics";
+import RecentActivity from "./ActivitySection/RecentActivity";
+import ConnectedAccounts from "./AccountsSection/ConnectedAccounts";
 
 export default function MyAccountContent({
   myAccountData,

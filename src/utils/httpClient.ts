@@ -109,4 +109,29 @@ export class HTTPClient {
     });
     return await response.json();
   }
+
+  async patch<B, T>(url: string, body: B): Promise<T> {
+    await this.ensureValidToken();
+
+    const token = localStorage.getItem("token");
+    const headers = this.getHeaders(token);
+    const response = await fetch(`${this.baseUrl}/${url}`, {
+      headers,
+      method: "PATCH",
+      body: JSON.stringify(body),
+    });
+    return await response.json();
+  }
+
+  async delete<T>(url: string): Promise<T> {
+    await this.ensureValidToken();
+
+    const token = localStorage.getItem("token");
+    const headers = this.getHeaders(token);
+    const response = await fetch(`${this.baseUrl}/${url}`, {
+      headers,
+      method: "DELETE",
+    });
+    return await response.json();
+  }
 }

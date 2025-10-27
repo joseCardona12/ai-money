@@ -1,11 +1,11 @@
 "use client";
 import AnalyticsStatsCards from "./AnalyticsStatsCards";
-import IncomeVsExpensesChart from "./IncomeVsExpensesChart";
-import SavingsTrendChart from "./SavingsTrendChart";
-import SpendingByCategoryChart from "./SpendingByCategoryChart";
-import TopSpendingCategoriesChart from "./TopSpendingCategoriesChart";
+import IncomeVsExpensesChart from "./Charts/IncomeVsExpensesChart";
+import SavingsTrendChart from "./Charts/SavingsTrendChart";
+import SpendingByCategoryChart from "./Charts/SpendingByCategoryChart";
+import TopSpendingCategoriesChart from "./Charts/TopSpendingCategoriesChart";
 import CategoryBreakdownList from "./CategoryBreakdownList";
-import CashFlowAnalysisChart from "./CashFlowAnalysisChart";
+import CashFlowAnalysisChart from "./Charts/CashFlowAnalysisChart";
 import Select from "@/ui/components/Select";
 import AnalyticsTabs from "./AnalyticsTabs";
 import { IUseAnalytics } from "../hooks/useAnalytics";

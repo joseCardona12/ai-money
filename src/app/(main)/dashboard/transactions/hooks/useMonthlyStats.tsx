@@ -1,6 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
-import { transactionService, IMonthlyStatsComparison } from "@/services/transaction";
+import {
+  transactionService,
+  IMonthlyStatsComparison,
+} from "@/services/transaction";
 import useAuthListener from "../../hooks/useAuthListener";
 
 export interface IMonthlyStats {
@@ -16,7 +19,13 @@ export interface IMonthlyStats {
   isLoading: boolean;
 }
 
-export default function useMonthlyStats(): IMonthlyStats {
+interface IUseMonthlyStatsProps {
+  refreshTrigger?: boolean;
+}
+
+export default function useMonthlyStats(
+  props?: IUseMonthlyStatsProps
+): IMonthlyStats {
   const { user } = useAuthListener();
   const [stats, setStats] = useState<IMonthlyStats>({
     totalAmount: 0,
@@ -37,6 +46,8 @@ export default function useMonthlyStats(): IMonthlyStats {
         return;
       }
 
+      setStats((prev) => ({ ...prev, isLoading: true }));
+
       try {
         const response = await transactionService.getMonthlyStatsComparison(
           user.id
@@ -54,7 +65,8 @@ export default function useMonthlyStats(): IMonthlyStats {
             totalExpensesChange: data.changes.totalExpensesChange,
             totalAmountChangePositive: data.changes.totalAmountChangePositive,
             totalIncomeChangePositive: data.changes.totalIncomeChangePositive,
-            totalExpensesChangePositive: data.changes.totalExpensesChangePositive,
+            totalExpensesChangePositive:
+              data.changes.totalExpensesChangePositive,
             isLoading: false,
           });
         }
@@ -64,8 +76,7 @@ export default function useMonthlyStats(): IMonthlyStats {
     };
 
     loadStats();
-  }, [user?.id]);
+  }, [user?.id, props?.refreshTrigger]);
 
   return stats;
 }
-

@@ -14,7 +14,7 @@ export interface IGoal {
 export interface IOverallProgress {
   totalCurrent: number;
   totalTarget: number;
-  percentage: number;
+  percentage: string;
   description: string;
 }
 

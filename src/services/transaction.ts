@@ -31,15 +31,23 @@ export interface IMonthlyStatsComparison {
 
 export interface ITransactionService {
   getTransactionsByUserId(userId: number): Promise<IResponseDto>;
-  getTransactionById(transactionId: number): Promise<IResponseDto>;
+  getTransactionById(
+    transactionId: number,
+    userId: number
+  ): Promise<IResponseDto>;
   createTransaction(
-    transaction: ICreateTransactionRequest
+    transaction: ICreateTransactionRequest,
+    userId: number
   ): Promise<IResponseDto>;
   updateTransaction(
     transactionId: number,
+    userId: number,
     transaction: IUpdateTransactionRequest
   ): Promise<IResponseDto>;
-  deleteTransaction(transactionId: number): Promise<IResponseDto>;
+  deleteTransaction(
+    transactionId: number,
+    userId: number
+  ): Promise<IResponseDto>;
   getMonthlyStatsComparison(userId: number): Promise<IResponseDto>;
 }
 
@@ -53,7 +61,7 @@ class TransactionService implements ITransactionService {
   public async getTransactionsByUserId(
     userId: number,
     page: number = 1,
-    limit: number = 20,
+    limit: number = 40,
     filters?: {
       search?: string;
       category?: string;
@@ -88,11 +96,12 @@ class TransactionService implements ITransactionService {
   }
 
   public async getTransactionById(
-    transactionId: number
+    transactionId: number,
+    userId: number
   ): Promise<IResponseDto> {
     try {
       return await this.httpClient.get<IResponseDto>(
-        `transactions/${transactionId}`
+        `transactions/${transactionId}/user/${userId}`
       );
     } catch (error) {
       throw error;
@@ -100,13 +109,14 @@ class TransactionService implements ITransactionService {
   }
 
   public async createTransaction(
-    transaction: ICreateTransactionRequest
+    transaction: ICreateTransactionRequest,
+    userId: number
   ): Promise<IResponseDto> {
     try {
       return await this.httpClient.post<
         ICreateTransactionRequest,
         IResponseDto
-      >("transactions", transaction);
+      >(`transactions/user/${userId}`, transaction);
     } catch (error) {
       throw error;
     }
@@ -114,11 +124,12 @@ class TransactionService implements ITransactionService {
 
   public async updateTransaction(
     transactionId: number,
+    userId: number,
     transaction: IUpdateTransactionRequest
   ): Promise<IResponseDto> {
     try {
       return await this.httpClient.put<IUpdateTransactionRequest, IResponseDto>(
-        `transactions/${transactionId}`,
+        `transactions/${transactionId}/user/${userId}`,
         transaction
       );
     } catch (error) {
@@ -126,11 +137,14 @@ class TransactionService implements ITransactionService {
     }
   }
 
-  public async deleteTransaction(transactionId: number): Promise<IResponseDto> {
+  public async deleteTransaction(
+    transactionId: number,
+    userId: number
+  ): Promise<IResponseDto> {
     try {
-      // Note: DELETE method not available in HTTPClient yet
-      // This is a placeholder for future implementation
-      throw new Error("DELETE method not implemented in HTTPClient");
+      return await this.httpClient.delete<IResponseDto>(
+        `transactions/${transactionId}/user/${userId}`
+      );
     } catch (error) {
       throw error;
     }

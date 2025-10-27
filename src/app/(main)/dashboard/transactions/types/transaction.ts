@@ -10,4 +10,9 @@ export interface ITransaction {
   status: "completed" | "pending" | "failed";
   icon: string;
   color: string;
+  // Backend IDs for editing
+  type_id?: number;
+  category_id?: number;
+  state_id?: number;
+  account_id?: number;
 }

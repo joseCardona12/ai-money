@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { transactionService } from "@/services/transaction";
 import { ITransaction } from "../types/transaction";
 import useAuthListener from "../../hooks/useAuthListener";
-import { mapBackendTransactionToUI } from "../utils/transactionMapper";
+import { mapBackendTransactionToUI } from "../utils/functions/transactionMapper";
 import { ITransactionFilters } from "../utils/constants/filter";
 import { CURRENT_ITEMS_PER_PAGE } from "../utils/constants/constants";
 
@@ -13,11 +13,12 @@ export default function useTransactionList(filters: ITransactionFilters) {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
     loadTransactions();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.id, currentPage, filters]);
+  }, [user?.id, currentPage, filters, isFetching]);
 
   const loadTransactions = async () => {
     if (!user?.id) {
@@ -98,5 +99,7 @@ export default function useTransactionList(filters: ITransactionFilters) {
     totalItems,
     isLoading,
     handlePageChange,
+    isFetching,
+    setIsFetching,
   };
 }

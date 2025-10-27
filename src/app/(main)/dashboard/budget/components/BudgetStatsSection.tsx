@@ -1,6 +1,6 @@
 "use client";
 import { IBudgetSummary } from "../types/budget";
-import { formatCurrency } from "../utils/formatCurrency";
+import { formatCurrency } from "../utils/functions/formatCurrency";
 
 interface BudgetStatsSectionProps {
   summary: IBudgetSummary;

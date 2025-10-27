@@ -65,6 +65,7 @@ export const LANGUAGES: ILanguage[] = [
 ];
 
 export const TIMEZONES: ITimezone[] = [
+  { code: "UTC-5", name: "Colombia Time (Bogotá)", offset: "(UTC-5)" },
   { code: "UTC-5", name: "Eastern Time", offset: "(UTC-5)" },
   { code: "UTC-6", name: "Central Time", offset: "(UTC-6)" },
   { code: "UTC-7", name: "Mountain Time", offset: "(UTC-7)" },

@@ -4,10 +4,10 @@ import { IBudgetCategory, IBudgetOption } from "../types/budget";
 import IconButton from "@/ui/components/IconButton";
 import TransactionOptionsMenu from "@/ui/components/TransactionOptionsMenu";
 import { IconDots } from "@tabler/icons-react";
-import { formatCurrency } from "../utils/formatCurrency";
-import { getProgressPercentage } from "../utils/getProgressPercentage";
-import { getRemainingAmount } from "../utils/getRamainingAmount";
-import { isOverBudget } from "../utils/isOverBudget";
+import { getProgressPercentage } from "../utils/functions/getProgressPercentage";
+import { getRemainingAmount } from "../utils/functions/getRemainingAmount";
+import { isOverBudget } from "../utils/functions/isOverBudget";
+import { formatCurrency } from "../utils/functions/formatCurrency";
 
 interface BudgetCategoriesSectionProps {
   categories: IBudgetCategory[];

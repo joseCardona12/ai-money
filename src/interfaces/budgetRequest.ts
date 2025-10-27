@@ -1,4 +1,5 @@
 export interface IBudgetRequest {
-  category: string;
-  monthlyBudget: number;
+  categoryId: number;
+  budgetedAmount: number;
+  month?: string; // ISO format: YYYY-MM-DD
 }

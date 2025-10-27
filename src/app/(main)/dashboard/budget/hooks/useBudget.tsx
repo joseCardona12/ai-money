@@ -149,13 +149,25 @@ export default function useBudget(): IUseBudget {
   };
 
   const fetchBudgets = async () => {
-    if (!user?.id) return;
+    if (!user?.id) {
+      console.log("No user ID available");
+      return;
+    }
     try {
       setIsLoading(true);
+      console.log(
+        "Fetching budgets for month:",
+        selectedMonth,
+        "user:",
+        user.id
+      );
+
       const response = await budgetService.getMonthlyBudgetOverview(
         user.id,
         selectedMonth
       );
+
+      console.log("Budget response:", response);
 
       if (response.status >= 400) {
         toast.error("Error", {
@@ -166,7 +178,16 @@ export default function useBudget(): IUseBudget {
       }
 
       const data = response.data;
+      console.log("Budget data:", data);
+
+      if (!data || !data.budgets) {
+        console.log("No budgets data received");
+        setCategories([]);
+        return;
+      }
+
       const mappedCategories = data.budgets.map(mapBackendBudgetToUI);
+      console.log("Mapped categories:", mappedCategories);
       setCategories(mappedCategories);
 
       const mappedSummary = mapBackendBudgetSummaryToUI(

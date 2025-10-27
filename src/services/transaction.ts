@@ -61,7 +61,7 @@ class TransactionService implements ITransactionService {
   public async getTransactionsByUserId(
     userId: number,
     page: number = 1,
-    limit: number = 20,
+    limit: number = 40,
     filters?: {
       search?: string;
       category?: string;

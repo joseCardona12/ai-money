@@ -32,7 +32,9 @@ export default function GoalsSection({
   };
 
   const calculateProgress = (current: number, target: number): string => {
-    return ((current / target) * 100).toFixed(2);
+    if (target === 0) return "0.00";
+    const progressValue = (current / target) * 100;
+    return isNaN(progressValue) ? "0.00" : progressValue.toFixed(2);
   };
 
   const getProgressPercentageValue = (progressString: string): number => {

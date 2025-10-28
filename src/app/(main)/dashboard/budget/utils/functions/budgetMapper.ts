@@ -1,4 +1,8 @@
-import { IBudgetCategory, IBudgetSummary, IBudgetAlert } from "../../types/budget";
+import {
+  IBudgetCategory,
+  IBudgetSummary,
+  IBudgetAlert,
+} from "../../types/budget";
 
 /**
  * Backend budget response format (snake_case)
@@ -119,14 +123,15 @@ export const mapBackendBudgetsToAlerts = (
   return budgets
     .filter((budget) => budget.is_over_budget)
     .map((budget) => {
-      const overAmount = Math.abs(
-        parseFloat(String(budget.remaining))
-      );
+      const parsedAmount = parseFloat(String(budget.remaining));
+      const overAmount = Math.abs(isNaN(parsedAmount) ? 0 : parsedAmount);
       return {
         id: budget.id,
         categoryName: budget.category?.name || "Unknown",
         overAmount,
-        message: `${budget.category?.name || "Unknown"}: $${overAmount.toFixed(2)} over`,
+        message: `${budget.category?.name || "Unknown"}: $${overAmount.toFixed(
+          2
+        )} over`,
       };
     });
 };
@@ -161,4 +166,3 @@ export const getCurrentMonthISO = (): string => {
   const now = new Date();
   return formatDateToISO(new Date(now.getFullYear(), now.getMonth(), 1));
 };
-

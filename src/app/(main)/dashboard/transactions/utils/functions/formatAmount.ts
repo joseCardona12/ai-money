@@ -1,5 +1,8 @@
-export const formatAmount = (amount: number, type: "income" | "expense") => {
-  const formattedAmount = `$${amount.toFixed(2)}`;
+export const formatAmount = (
+  amount: number | undefined | null,
+  type: "income" | "expense"
+) => {
+  const safeAmount = amount ?? 0;
+  const formattedAmount = `$${safeAmount.toFixed(2)}`;
   return type === "income" ? `+${formattedAmount}` : `-${formattedAmount}`;
 };
-

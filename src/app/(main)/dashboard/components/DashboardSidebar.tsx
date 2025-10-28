@@ -1,7 +1,12 @@
 "use client";
 import { usePathname } from "next/navigation";
 import Logo from "@/ui/components/Logo";
-import { MENU_ITEMS, BOTTOM_MENU_ITEMS } from "../utils/constants/menuItems";
+import {
+  MENU_ITEMS,
+  BOTTOM_MENU_ITEMS,
+  MENU_ITEMS_ADMIN,
+} from "../utils/constants/menuItems";
+import useAuthListener from "../hooks/useAuthListener";
 
 interface DashboardSidebarProps {
   onMenuItemClick: (href: string) => void;
@@ -14,7 +19,9 @@ export default function DashboardSidebar({
   onToggleDarkMode,
   isDarkMode,
 }: DashboardSidebarProps): React.ReactNode {
+  const { user } = useAuthListener();
   const pathname = usePathname();
+  const VERIFY_MENU_ITEMS = user?.role_id === 1 ? MENU_ITEMS : MENU_ITEMS_ADMIN;
   return (
     <div
       className="w-64 h-full flex flex-col border-r-1 border-[var(--color-gray-border)]"
@@ -25,7 +32,7 @@ export default function DashboardSidebar({
       </div>
       <div className="flex-1 p-4">
         <nav className="space-y-2">
-          {MENU_ITEMS.map((item, index) => {
+          {VERIFY_MENU_ITEMS.map((item, index) => {
             const isActive = pathname === item.href;
             return (
               <button

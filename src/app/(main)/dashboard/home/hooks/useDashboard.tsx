@@ -64,22 +64,23 @@ export default function useDashboard(): IUseDashboard {
         if (response.status < 400 && response.data) {
           const analyticsData = response.data;
 
+          // Safely get values with defaults
+          const totalIncome = analyticsData.total_income ?? 0;
+          const totalExpenses = analyticsData.total_expenses ?? 0;
+
           // Update stats cards with analytics data
           setStatsCards([
             {
               title: "Total balance",
-              amount: `$${(
-                analyticsData.total_income - analyticsData.total_expenses
-              ).toFixed(2)}`,
+              amount: `$${(totalIncome - totalExpenses).toFixed(2)}`,
               currency: "USD",
               change: "0%",
               changeText: "Net balance",
-              positive:
-                analyticsData.total_income >= analyticsData.total_expenses,
+              positive: totalIncome >= totalExpenses,
             },
             {
               title: "Income",
-              amount: `$${analyticsData.total_income.toFixed(2)}`,
+              amount: `$${totalIncome.toFixed(2)}`,
               currency: "USD",
               change: "0%",
               changeText: "Total income",
@@ -87,7 +88,7 @@ export default function useDashboard(): IUseDashboard {
             },
             {
               title: "Expenses",
-              amount: `$${analyticsData.total_expenses.toFixed(2)}`,
+              amount: `$${totalExpenses.toFixed(2)}`,
               currency: "USD",
               change: "0%",
               changeText: "Total expenses",

@@ -2,7 +2,10 @@
 import Modal from "@/ui/components/Modal";
 import Button from "@/ui/components/Button";
 import { IGoal } from "../../types/goals";
-import { getDaysRemaining, formatDeadline } from "../../utils/functions/goalMapper";
+import {
+  getDaysRemaining,
+  formatDeadline,
+} from "../../utils/functions/goalMapper";
 import { IconEdit, IconPlus } from "@tabler/icons-react";
 
 interface GoalDetailsModalProps {
@@ -31,7 +34,11 @@ export default function GoalDetailsModal({
     }).format(amount);
   };
 
-  const percentage = ((goal.currentAmount / goal.targetAmount) * 100).toFixed(2);
+  const percentageValue =
+    goal.targetAmount > 0 ? (goal.currentAmount / goal.targetAmount) * 100 : 0;
+  const percentage = isNaN(percentageValue)
+    ? "0.00"
+    : percentageValue.toFixed(2);
   const daysRemaining = getDaysRemaining(goal.deadline);
   const isOverdue = daysRemaining < 0;
   const remainingAmount = goal.targetAmount - goal.currentAmount;
@@ -57,7 +64,9 @@ export default function GoalDetailsModal({
         <div className="bg-gray-50 rounded-lg p-4 mb-6">
           <div className="flex justify-between items-center mb-2">
             <span className="text-sm font-medium text-gray-600">Progress</span>
-            <span className="text-sm font-bold text-gray-900">{percentage}%</span>
+            <span className="text-sm font-bold text-gray-900">
+              {percentage}%
+            </span>
           </div>
           <div className="w-full h-3 bg-gray-200 rounded-full mb-3">
             <div
@@ -70,7 +79,8 @@ export default function GoalDetailsModal({
           </div>
           <div className="flex justify-between items-center text-sm">
             <span className="text-gray-600">
-              {formatCurrency(goal.currentAmount)} / {formatCurrency(goal.targetAmount)}
+              {formatCurrency(goal.currentAmount)} /{" "}
+              {formatCurrency(goal.targetAmount)}
             </span>
             <span className="text-gray-600">
               {formatCurrency(remainingAmount)} remaining
@@ -86,7 +96,11 @@ export default function GoalDetailsModal({
             <p className="text-sm font-semibold text-gray-900">
               {formatDeadline(goal.deadline)}
             </p>
-            <p className={`text-xs mt-1 ${isOverdue ? 'text-red-600' : 'text-green-600'}`}>
+            <p
+              className={`text-xs mt-1 ${
+                isOverdue ? "text-red-600" : "text-green-600"
+              }`}
+            >
               {isOverdue
                 ? `${Math.abs(daysRemaining)} days overdue`
                 : `${daysRemaining} days remaining`}
@@ -103,7 +117,9 @@ export default function GoalDetailsModal({
 
           {/* Current Amount */}
           <div className="bg-white border border-gray-200 rounded-lg p-4">
-            <p className="text-xs font-medium text-gray-600 mb-1">Current Amount</p>
+            <p className="text-xs font-medium text-gray-600 mb-1">
+              Current Amount
+            </p>
             <p className="text-sm font-semibold text-gray-900">
               {formatCurrency(goal.currentAmount)}
             </p>
@@ -111,7 +127,9 @@ export default function GoalDetailsModal({
 
           {/* Target Amount */}
           <div className="bg-white border border-gray-200 rounded-lg p-4">
-            <p className="text-xs font-medium text-gray-600 mb-1">Target Amount</p>
+            <p className="text-xs font-medium text-gray-600 mb-1">
+              Target Amount
+            </p>
             <p className="text-sm font-semibold text-gray-900">
               {formatCurrency(goal.targetAmount)}
             </p>
@@ -164,4 +182,3 @@ export default function GoalDetailsModal({
     </Modal>
   );
 }
-
